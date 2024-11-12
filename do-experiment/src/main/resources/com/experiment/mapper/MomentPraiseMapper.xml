@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tuling.mapper.MomentPraiseMapper">
+<mapper namespace="com.experiment.mapper.MomentPraiseMapper">
 
-    <resultMap type="com.tuling.entity.MomentPraise" id="MomentPraiseResult">
+    <resultMap type="com.experiment.entity.MomentPraise" id="MomentPraiseResult">
         <result property="id"    column="id"    />
         <result property="dynamicId"    column="dynamic_id"    />
         <result property="userId"    column="user_id"    />
@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, dynamic_id, user_id, praise_time, status, update_time from moment_praise
     </sql>
 
-    <select id="selectMomentPraiseList" parameterType="com.tuling.entity.MomentPraise" resultMap="MomentPraiseResult">
+    <select id="selectMomentPraiseList" parameterType="com.experiment.entity.MomentPraise" resultMap="MomentPraiseResult">
         <include refid="selectMomentPraiseVo"/>
         <where>
             <if test="dynamicId != null "> and dynamic_id = #{dynamicId}</if>
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <insert id="insertMomentPraise" parameterType="com.tuling.entity.MomentPraise" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertMomentPraise" parameterType="com.experiment.entity.MomentPraise" useGeneratedKeys="true" keyProperty="id">
         insert into moment_praise
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="dynamicId != null">dynamic_id,</if>
@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateMomentPraise" parameterType="com.tuling.entity.MomentPraise">
+    <update id="updateMomentPraise" parameterType="com.experiment.entity.MomentPraise">
         update moment_praise
         <trim prefix="SET" suffixOverrides=",">
             <if test="dynamicId != null">dynamic_id = #{dynamicId},</if>
