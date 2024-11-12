@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuling.mapper.MomentPraiseMapper">
+
+    <resultMap type="com.tuling.entity.MomentPraise" id="MomentPraiseResult">
+        <result property="id"    column="id"    />
+        <result property="dynamicId"    column="dynamic_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="praiseTime"    column="praise_time"    />
+        <result property="status"    column="status"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMomentPraiseVo">
+        select id, dynamic_id, user_id, praise_time, status, update_time from moment_praise
+    </sql>
+
+    <select id="selectMomentPraiseList" parameterType="com.tuling.entity.MomentPraise" resultMap="MomentPraiseResult">
+        <include refid="selectMomentPraiseVo"/>
+        <where>
+            <if test="dynamicId != null "> and dynamic_id = #{dynamicId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="praiseTime != null "> and praise_time = #{praiseTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectMomentPraiseById" parameterType="Long" resultMap="MomentPraiseResult">
+        <include refid="selectMomentPraiseVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMomentPraise" parameterType="com.tuling.entity.MomentPraise" useGeneratedKeys="true" keyProperty="id">
+        insert into moment_praise
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dynamicId != null">dynamic_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="praiseTime != null">praise_time,</if>
+            <if test="status != null">status,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dynamicId != null">#{dynamicId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="praiseTime != null">#{praiseTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMomentPraise" parameterType="com.tuling.entity.MomentPraise">
+        update moment_praise
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dynamicId != null">dynamic_id = #{dynamicId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="praiseTime != null">praise_time = #{praiseTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMomentPraiseById" parameterType="Long">
+        delete from moment_praise where id = #{id}
+    </delete>
+
+    <delete id="deleteMomentPraiseByDynamicIds" parameterType="String">
+        delete from moment_praise where dynamic_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
