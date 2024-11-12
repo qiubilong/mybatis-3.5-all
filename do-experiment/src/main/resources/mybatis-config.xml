@@ -31,7 +31,7 @@
 
     <mappers>
         <!--1.必须保证接口名（例如IUserDao）和xml名（IUserDao.xml）相同，还必须在同一个包中-->
-        <package name="com.tuling.mapper"/>
+        <package name="com.experiment.mapper"/>
 
         <!--2.不用保证同接口同包同名
          <mapper resource="com/mybatis/mappers/EmployeeMapper.xml"/>
