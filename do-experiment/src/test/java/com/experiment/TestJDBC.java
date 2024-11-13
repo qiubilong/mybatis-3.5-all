@@ -1,6 +1,6 @@
 package com.experiment;
 
-import com.tuling.entity.User;
+import com.experiment.entity.User;
 import org.junit.Test;
 
 import java.sql.*;
