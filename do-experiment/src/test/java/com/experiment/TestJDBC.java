@@ -21,7 +21,7 @@ public class TestJDBC {
 
             // 2.创建连接
             conn= DriverManager.   // SPI
-                    getConnection("jdbc:mysql://localhost:3306/mybatis_example", "root", "123456");
+                    getConnection("jdbc:mysql://localhost:3306/experiment?characterEncoding=utf8&useSSL=false", "root", "123456");
 
             // 开启事务
             conn.setAutoCommit(false);
@@ -31,7 +31,8 @@ public class TestJDBC {
 
             // 获得sql执行者  ：
             // 1. 执行预处理
-            pstmt=conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt2 = conn.prepareStatement(sql);
             pstmt.setInt(1,1);
 
 
