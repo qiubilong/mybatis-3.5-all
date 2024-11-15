@@ -98,9 +98,10 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * @author Clinton Begin
  */
+/* mybatis全局配置 */
 public class Configuration {
 
-  protected Environment environment;
+  protected Environment environment;  /* 数据源 */
 
   protected boolean safeRowBoundsEnabled;
   protected boolean safeResultHandlerEnabled = true;
@@ -144,10 +145,18 @@ public class Configuration {
    */
   protected Class<?> configurationFactory;
 
+  /* Mapper映射 - 注册器  */
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
+
+  /* 插件拦截器  */
   protected final InterceptorChain interceptorChain = new InterceptorChain();
+
+  /* 类型处理器 --> 设置参数 / 获取结果   */
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+
+  /* 别名 - 注册器 */
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection")
@@ -182,10 +191,12 @@ public class Configuration {
     typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
     typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
 
+    /* 数据源 - 别名 */
     typeAliasRegistry.registerAlias("JNDI", JndiDataSourceFactory.class);
     typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
     typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
 
+    /* 缓存器 - 别名 */
     typeAliasRegistry.registerAlias("PERPETUAL", PerpetualCache.class);
     typeAliasRegistry.registerAlias("FIFO", FifoCache.class);
     typeAliasRegistry.registerAlias("LRU", LruCache.class);

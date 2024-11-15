@@ -19,7 +19,7 @@ public class App {
         Reader reader = Resources.getResourceAsReader(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 
-        SqlSession session = sqlSessionFactory.openSession();
+        SqlSession session = sqlSessionFactory.openSession(); /* DefaultSqlSessionFactory.openSession()  */
         try {
             // 执行查询 底层执行jdbc 3
             User user =  session.selectOne("com.experiment.mapper.UserMapper.selectById", 1);

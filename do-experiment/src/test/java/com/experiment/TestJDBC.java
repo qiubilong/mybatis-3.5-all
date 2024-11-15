@@ -13,10 +13,10 @@ public class TestJDBC {
 
     @Test
     public  void test() throws SQLException {
-        Connection conn=null;
+        Connection conn = null;
         PreparedStatement pstmt=null;
         try {
-            // 1.加载驱动
+            // 1.加载驱动,非必须
             //Class.forName("com.mysql.jdbc.Driver");
 
             // 2.创建连接
@@ -64,6 +64,8 @@ public class TestJDBC {
             //开启预处理，只是传输参数
             pstmt1.execute();
 
+            //返回主键测试
+            testGenerateKey(conn);
 
             // 提交事务
             conn.commit();
@@ -85,6 +87,21 @@ public class TestJDBC {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void testGenerateKey(Connection conn) throws Exception{
+        String sql = "INSERT INTO t_user (user_name) VALUES (?)";
+        PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);/* 有无Statement.RETURN_GENERATED_KEYS，sql插入时都会返回主键 */
+        pstmt.setString(1, "value1");
+        int affectedRows = pstmt.executeUpdate();
+
+        if (affectedRows > 0) {
+            ResultSet rs = pstmt.getGeneratedKeys(); /* 需要设置Statement.RETURN_GENERATED_KEYS */
+            if (rs.next()) {
+                long generatedId = rs.getLong(1); // 获取生成的主键值
+                System.out.println("Generated ID: " + generatedId);
             }
         }
     }

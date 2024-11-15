@@ -43,7 +43,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
   }
 
   @Override
-  public SqlSession openSession() {
+  public SqlSession openSession() { /* SqlSession线程不安全 */
     return openSessionFromDataSource(configuration.getDefaultExecutorType(), null, false);
   }
 

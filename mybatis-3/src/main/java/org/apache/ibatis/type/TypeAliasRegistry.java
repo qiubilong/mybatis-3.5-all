@@ -140,7 +140,7 @@ public class TypeAliasRegistry {
 
   public void registerAlias(Class<?> type) {
     String alias = type.getSimpleName();
-    Alias aliasAnnotation = type.getAnnotation(Alias.class);
+    Alias aliasAnnotation = type.getAnnotation(Alias.class); /* 解析class注解Alias --> 注册别名   */
     if (aliasAnnotation != null) {
       alias = aliasAnnotation.value();
     }
