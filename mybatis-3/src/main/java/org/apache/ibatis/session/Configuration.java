@@ -108,7 +108,7 @@ public class Configuration {
   protected boolean mapUnderscoreToCamelCase;
   protected boolean aggressiveLazyLoading;
   protected boolean multipleResultSetsEnabled = true;
-  protected boolean useGeneratedKeys;
+  protected boolean useGeneratedKeys; /* 支持pstmt.getGeneratedKeys()读取返回insert自增主键（insert时数据库都会返回） */
   protected boolean useColumnLabel = true;
   protected boolean cacheEnabled = true;
   protected boolean callSettersOnNulls;
