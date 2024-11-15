@@ -2,46 +2,60 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!--properties 扫描属性文件.properties  -->
-    <properties resource="db.properties"></properties>
+    <!--加载properties文件  -->
+    <properties resource="db.properties">
+        <property name="myName" value="xxxx"/>
+    </properties>
 
-
+    <!--全局 - 配置-->
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="useGeneratedKeys" value="true"/>
     </settings>
 
+   <!-- 别名 - 配置，就是类名简称-->
+    <typeAliases>
+        <typeAlias alias="blog" type="domain.blog.Blog"/>
+        <!-- 别名扫描，没有指定注解时@Alias("xxx")，使用类名（首字符小写）作为别名-->
+        <package name="com.experiment.entity"/>
+
+    </typeAliases>
+
+   <!-- 插件 - 配置-->
  <!--  <plugins>
        <plugin interceptor="com.tuling.plugins.ExamplePlugin" ></plugin>
     </plugins>
 -->
+
+   <!-- 环境数据源 - 配置  -->
     <environments default="development">
         <environment id="development">
-           <transactionManager type="JDBC"/>
+           <transactionManager type="JDBC"/> <!--指定JDBC事务管理器，集成spring时会使用spring的事务管理器-->
             <!--//  mybatis内置了JNDI、POOLED、UNPOOLED三种类型的数据源,其中POOLED对应的实现为org.apache.ibatis.datasource.pooled.PooledDataSource,它是mybatis自带实现的一个同步、线程安全的数据库连接池 一般在生产中,我们会使用c3p0或者druid连接池-->
             <dataSource type="POOLED">
-            <property name="driver" value="${mysql.driverClass}"/>
-            <property name="url" value="${mysql.jdbcUrl}"/>
-            <property name="username" value="${mysql.user}"/>
-            <property name="password" value="${mysql.password}"/>
-        </dataSource>
+                <property name="driver" value="${mysql.driverClass}"/>
+                <property name="url" value="${mysql.jdbcUrl}"/>
+                <property name="username" value="${mysql.user}"/>
+                <property name="password" value="${mysql.password}"/>
+            </dataSource>
         </environment>
     </environments>
 
 
-
+  <!-- 映射器 - 配置-->
     <mappers>
-        <!--1.必须保证接口名（例如IUserDao）和xml名（IUserDao.xml）相同，还必须在同一个包中-->
+        <!-- 1、包路径扫描 -->
         <package name="com.experiment.mapper"/>
 
-        <!--2.不用保证同接口同包同名
+        <!-- 2、指定Mapper.xml，不用保证同接口同包同名
          <mapper resource="com/mybatis/mappers/EmployeeMapper.xml"/>
 
         3.保证接口名（例如IUserDao）和xml名（IUserDao.xml）相同，还必须在同一个包中
         <mapper class="com.mybatis.dao.EmployeeMapper"/>
 
         4.不推荐:引用网路路径或者磁盘路径下的sql映射文件 file:///var/mappers/AuthorMapper.xml
-         <mapper url="file:E:/Study/myeclipse/_03_Test/src/cn/sdut/pojo/PersonMapper.xml"/>-->
-
+         <mapper url="file:E:/Study/myeclipse/_03_Test/src/cn/sdut/pojo/PersonMapper.xml"/>
+         -->
     </mappers>
 </configuration>
 

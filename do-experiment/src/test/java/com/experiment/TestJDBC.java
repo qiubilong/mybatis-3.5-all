@@ -20,37 +20,49 @@ public class TestJDBC {
             //Class.forName("com.mysql.jdbc.Driver");
 
             // 2.创建连接
-            conn= DriverManager.   // SPI
+            conn= DriverManager.   /* 如果没有 Class.forName("com.mysql.jdbc.Driver")， 这里会通过SPI机制加载Driver */
                     getConnection("jdbc:mysql://localhost:3306/experiment?characterEncoding=utf8&useSSL=false", "root", "123456");
+                    //getConnection("jdbc:mysql://localhost:3306/experiment?characterEncoding=utf8&useSSL=false&useServerPrepStmts=true&cachePrepStmts=true", "root", "123456");
 
             // 开启事务
             conn.setAutoCommit(false);
 
             // SQL语句  参数#{}  ${}  <if>
-            String sql="  select id,user_name,create_time from   t_user where id=?;";
+            String sql="select id,user_name,create_time from  t_user where user_name= ? ;";
 
-            // 获得sql执行者  ：
-            // 1. 执行预处理
+            /*开启预处理时，首先向数据库执行预处理，如 Prepare	select id,user_name,create_time from  t_user where user_name= ?*/
+            //可以在C:\ProgramData\MySQL\MySQL Server 5.7\Data\DESKTOP-SKE8KR8.log 数据库通用日志中验证
             pstmt = conn.prepareStatement(sql);
-            PreparedStatement pstmt2 = conn.prepareStatement(sql);
-            pstmt.setInt(1,1);
+            pstmt.setString(1,"xxx");/*这里对字符转义处理，防止sql注入*/
 
-
-            // 执行查询
+            /*开启预处理时，这里只是传输参数。因此如果开启了SQL预编译，又不开启缓存，那么执行SQL需要两次io交互 */
             pstmt.execute();
-            ResultSet rs= pstmt.getResultSet();
-            //ResultSet rs= pstmt.executeQuery();
+            /* 开启sql预编译与否性能测试
+             * https://blog.csdn.net/weixin_36380516/article/details/124958213
+             */
 
-            rs.next();
-            User user =new User();
-            user.setId(rs.getLong("id"));
-            user.setUserName(rs.getString("user_name"));
-            user.setCreateTime(rs.getDate("create_time"));
-            System.out.println(user.toString());
 
-            pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,1);
+            //处理结果集
+            ResultSet rs = pstmt.getResultSet();
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getLong("id"));
+                user.setUserName(rs.getString("user_name"));
+                user.setCreateTime(rs.getDate("create_time"));
+                System.out.println(user.toString());
+            }
 
+
+            // useServerPrepStmts=true&cachePrepStmts=true --> 开启预处理--> 缓存
+            if(pstmt!=null){
+                pstmt.close();
+            }
+
+            //useServerPrepStmts=true&cachePrepStmts=true --> 开启预处理 --> 从缓存中获取
+            PreparedStatement pstmt1 = conn.prepareStatement(sql);
+            pstmt1.setString(1,"xxx2");
+            //开启预处理，只是传输参数
+            pstmt1.execute();
 
 
             // 提交事务
@@ -63,12 +75,14 @@ public class TestJDBC {
         finally{
             // 关闭资源
             try {
+                if(pstmt!=null){
+                    pstmt.close(); //  useServerPrepStmts=true&cachePrepStmts=true --> 缓存
+                }
+
                 if(conn!=null){
                     conn.close();
                 }
-                if(pstmt!=null){
-                    pstmt.close();
-                }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
