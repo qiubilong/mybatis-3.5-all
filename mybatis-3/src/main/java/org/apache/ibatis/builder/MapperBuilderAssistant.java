@@ -180,7 +180,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
       Discriminator discriminator,
       List<ResultMapping> resultMappings,
       Boolean autoMapping) {
-    id = applyCurrentNamespace(id, false);
+    id = applyCurrentNamespace(id, false);  /* id = namespace + id */
     extend = applyCurrentNamespace(extend, true);
 
     if (extend != null) {
@@ -266,7 +266,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
     if (unresolvedCacheRef) {
       throw new IncompleteElementException("Cache-ref not yet resolved");
     }
-
+    /* id = namespace + id */
     id = applyCurrentNamespace(id, false);
     boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
 
@@ -287,12 +287,12 @@ public class MapperBuilderAssistant extends BaseBuilder {
         .flushCacheRequired(valueOrDefault(flushCache, !isSelect))
         .useCache(valueOrDefault(useCache, isSelect))
         .cache(currentCache);
-
+    /* 参数类型 */
     ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);
     if (statementParameterMap != null) {
       statementBuilder.parameterMap(statementParameterMap);
     }
-
+    /* 添加sql映射语句 */
     MappedStatement statement = statementBuilder.build();
     configuration.addMappedStatement(statement);
     return statement;

@@ -56,7 +56,7 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   private final XPathParser parser;
   private final MapperBuilderAssistant builderAssistant;
-  private final Map<String, XNode> sqlFragments;
+  private final Map<String, XNode> sqlFragments; /* sql片段 */
   private final String resource;
 
   @Deprecated
@@ -91,7 +91,7 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   public void parse() {
     if (!configuration.isResourceLoaded(resource)) {
-      configurationElement(parser.evalNode("/mapper"));
+      configurationElement(parser.evalNode("/mapper"));/* 解析xmlMapper */
       configuration.addLoadedResource(resource);
       bindMapperForNamespace();
     }
@@ -113,11 +113,11 @@ public class XMLMapperBuilder extends BaseBuilder {
       }
       builderAssistant.setCurrentNamespace(namespace);
       cacheRefElement(context.evalNode("cache-ref"));
-      cacheElement(context.evalNode("cache"));
+      cacheElement(context.evalNode("cache"));      /* 解析 - mapper缓存*/
       parameterMapElement(context.evalNodes("/mapper/parameterMap"));
-      resultMapElements(context.evalNodes("/mapper/resultMap"));
-      sqlElement(context.evalNodes("/mapper/sql"));
-      buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
+      resultMapElements(context.evalNodes("/mapper/resultMap")); /* 解析 - 结果映射（javaBean属性与数据表列名一致时可无需配置） */
+      sqlElement(context.evalNodes("/mapper/sql")); /* 解析 - sql片段  */
+      buildStatementFromContext(context.evalNodes("select|insert|update|delete")); /* 解析sql语句 */
     } catch (Exception e) {
       throw new BuilderException("Error parsing Mapper XML. The XML location is '" + resource + "'. Cause: " + e, e);
     }
@@ -134,7 +134,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     for (XNode context : list) {
       final XMLStatementBuilder statementParser = new XMLStatementBuilder(configuration, builderAssistant, context, requiredDatabaseId);
       try {
-        statementParser.parseStatementNode();
+        statementParser.parseStatementNode(); /* 解析sql映射语句节点 */
       } catch (IncompleteElementException e) {
         configuration.addIncompleteStatement(statementParser);
       }
@@ -200,9 +200,9 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   private void cacheElement(XNode context) {
     if (context != null) {
-      String type = context.getStringAttribute("type", "PERPETUAL");
+      String type = context.getStringAttribute("type", "PERPETUAL"); /* 默认缓存 PerpetualCache */
       Class<? extends Cache> typeClass = typeAliasRegistry.resolveAlias(type);
-      String eviction = context.getStringAttribute("eviction", "LRU");
+      String eviction = context.getStringAttribute("eviction", "LRU"); /* 默认缓存清除策略 LruCache */
       Class<? extends Cache> evictionClass = typeAliasRegistry.resolveAlias(eviction);
       Long flushInterval = context.getLongAttribute("flushInterval");
       Integer size = context.getIntAttribute("size");
@@ -255,6 +255,8 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   private ResultMap resultMapElement(XNode resultMapNode, List<ResultMapping> additionalResultMappings, Class<?> enclosingType) throws Exception {
     ErrorContext.instance().activity("processing " + resultMapNode.getValueBasedIdentifier());
+
+    /* 解析结果映射 - javaBean类型 */
     String type = resultMapNode.getStringAttribute("type",
         resultMapNode.getStringAttribute("ofType",
             resultMapNode.getStringAttribute("resultType",
@@ -267,26 +269,27 @@ public class XMLMapperBuilder extends BaseBuilder {
     List<ResultMapping> resultMappings = new ArrayList<>();
     resultMappings.addAll(additionalResultMappings);
     List<XNode> resultChildren = resultMapNode.getChildren();
-    for (XNode resultChild : resultChildren) {
+    for (XNode resultChild : resultChildren) {  /* 遍历<resultMap>节点 */
       if ("constructor".equals(resultChild.getName())) {
         processConstructorElement(resultChild, typeClass, resultMappings);
       } else if ("discriminator".equals(resultChild.getName())) {
         discriminator = processDiscriminatorElement(resultChild, typeClass, resultMappings);
       } else {
         List<ResultFlag> flags = new ArrayList<>();
-        if ("id".equals(resultChild.getName())) {
+        if ("id".equals(resultChild.getName())) { /* 主键 */
           flags.add(ResultFlag.ID);
         }
-        resultMappings.add(buildResultMappingFromContext(resultChild, typeClass, flags));
+        resultMappings.add(buildResultMappingFromContext(resultChild, typeClass, flags)); /* 解析字段映射 */
       }
     }
     String id = resultMapNode.getStringAttribute("id",
             resultMapNode.getValueBasedIdentifier());
     String extend = resultMapNode.getStringAttribute("extends");
     Boolean autoMapping = resultMapNode.getBooleanAttribute("autoMapping");
+    /* 结果集映射器 */
     ResultMapResolver resultMapResolver = new ResultMapResolver(builderAssistant, id, typeClass, extend, discriminator, resultMappings, autoMapping);
     try {
-      return resultMapResolver.resolve();
+      return resultMapResolver.resolve(); /* 添加到全局配置Configuration */
     } catch (IncompleteElementException  e) {
       configuration.addIncompleteResultMap(resultMapResolver);
       throw e;
@@ -339,7 +342,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     if (configuration.getDatabaseId() != null) {
       sqlElement(list, configuration.getDatabaseId());
     }
-    sqlElement(list, null);
+    sqlElement(list, null); /* 解析sql片段 */
   }
 
   private void sqlElement(List<XNode> list, String requiredDatabaseId) {
@@ -373,11 +376,11 @@ public class XMLMapperBuilder extends BaseBuilder {
     if (flags.contains(ResultFlag.CONSTRUCTOR)) {
       property = context.getStringAttribute("name");
     } else {
-      property = context.getStringAttribute("property");
+      property = context.getStringAttribute("property");  /* javaBean属性名 */
     }
-    String column = context.getStringAttribute("column");
+    String column = context.getStringAttribute("column"); /* 表字段 */
     String javaType = context.getStringAttribute("javaType");
-    String jdbcType = context.getStringAttribute("jdbcType");
+    String jdbcType = context.getStringAttribute("jdbcType");/* 表字段类型 */
     String nestedSelect = context.getStringAttribute("select");
     String nestedResultMap = context.getStringAttribute("resultMap",
         processNestedResultMappings(context, Collections.emptyList(), resultType));

@@ -50,7 +50,7 @@ public class XMLScriptBuilder extends BaseBuilder {
     initNodeHandlerMap();
   }
 
-
+  /* sql语句节点处理器 */
   private void initNodeHandlerMap() {
     nodeHandlerMap.put("trim", new TrimHandler());
     nodeHandlerMap.put("where", new WhereHandler());
@@ -64,9 +64,9 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   public SqlSource parseScriptNode() {
-    MixedSqlNode rootSqlNode = parseDynamicTags(context);
+    MixedSqlNode rootSqlNode = parseDynamicTags(context);/* 解析sql节点 */
     SqlSource sqlSource;
-    if (isDynamic) {
+    if (isDynamic) { /* 出现where、if、foreach、${}关键字都是动态sql */
       sqlSource = new DynamicSqlSource(configuration, rootSqlNode);
     } else {
       sqlSource = new RawSqlSource(configuration, rootSqlNode, parameterType);
@@ -75,14 +75,14 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   protected MixedSqlNode parseDynamicTags(XNode node) {
-    List<SqlNode> contents = new ArrayList<>();
+    List<SqlNode> contents = new ArrayList<>();/* sql节点列表 */
     NodeList children = node.getNode().getChildNodes();
-    for (int i = 0; i < children.getLength(); i++) {
+    for (int i = 0; i < children.getLength(); i++) {/* 遍历sql映射语句子节点 */
       XNode child = node.newXNode(children.item(i));
       if (child.getNode().getNodeType() == Node.CDATA_SECTION_NODE || child.getNode().getNodeType() == Node.TEXT_NODE) {
         String data = child.getStringBody("");
         TextSqlNode textSqlNode = new TextSqlNode(data);
-        if (textSqlNode.isDynamic()) {
+        if (textSqlNode.isDynamic()) { /* ${}存在就是动态sql */
           contents.add(textSqlNode);
           isDynamic = true;
         } else {
@@ -90,12 +90,12 @@ public class XMLScriptBuilder extends BaseBuilder {
         }
       } else if (child.getNode().getNodeType() == Node.ELEMENT_NODE) { // issue #628
         String nodeName = child.getNode().getNodeName();
-        NodeHandler handler = nodeHandlerMap.get(nodeName);
+        NodeHandler handler = nodeHandlerMap.get(nodeName); /* where、if、foreach等节点处理 */
         if (handler == null) {
           throw new BuilderException("Unknown element <" + nodeName + "> in SQL statement.");
         }
         handler.handleNode(child, contents);
-        isDynamic = true;
+        isDynamic = true;  /* 出现where、if、foreach等节点，也是动态sql */
       }
     }
     return new MixedSqlNode(contents);

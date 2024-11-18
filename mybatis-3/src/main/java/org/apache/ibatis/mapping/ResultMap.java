@@ -34,13 +34,13 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  */
-public class ResultMap {
+public class ResultMap { /* 结果映射 - javaBean -- 数据表 */
   private Configuration configuration;
 
-  private String id;
-  private Class<?> type;
-  private List<ResultMapping> resultMappings;
-  private List<ResultMapping> idResultMappings;
+  private String id;                           /* 命名空间namespace + 节点ID */
+  private Class<?> type;                       /* javaBean class */
+  private List<ResultMapping> resultMappings;  /* 字段映射列表 */
+  private List<ResultMapping> idResultMappings;/* 主键 */
   private List<ResultMapping> constructorResultMappings;
   private List<ResultMapping> propertyResultMappings;
   private Set<String> mappedColumns;

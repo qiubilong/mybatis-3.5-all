@@ -28,14 +28,14 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * @author Clinton Begin
  */
-public class ResultMapping {
+public class ResultMapping {             /* 字段映射 */
 
-  private Configuration configuration;
-  private String property;
-  private String column;
-  private Class<?> javaType;
-  private JdbcType jdbcType;
-  private TypeHandler<?> typeHandler;
+  private Configuration configuration;   /* 全局配置 */
+  private String property;               /* javaBean属性名 */
+  private String column;                 /* 表列名 */
+  private Class<?> javaType;             /* javaBean属性 - 数据类型 */
+  private JdbcType jdbcType;             /* 表列-数据类型 */
+  private TypeHandler<?> typeHandler;    /* 数据处理器 */
   private String nestedResultMapId;
   private String nestedQueryId;
   private Set<String> notNullColumns;

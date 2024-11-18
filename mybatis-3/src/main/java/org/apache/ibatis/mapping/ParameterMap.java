@@ -26,7 +26,7 @@ import org.apache.ibatis.session.Configuration;
 public class ParameterMap {
 
   private String id;
-  private Class<?> type;
+  private Class<?> type;  /* 参数对应类  */
   private List<ParameterMapping> parameterMappings;
 
   private ParameterMap() {

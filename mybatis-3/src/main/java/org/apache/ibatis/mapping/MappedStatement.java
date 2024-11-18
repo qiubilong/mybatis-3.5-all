@@ -31,25 +31,24 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  */
-public final class MappedStatement {
-
+public final class MappedStatement { /* sql映射语句 */
   private String resource;
   private Configuration configuration;
-  private String id;
+  private String id;                        /* namespace + id */
   private Integer fetchSize;
   private Integer timeout;
-  private StatementType statementType;
+  private StatementType statementType;      /* sql执行方式 ,默认prepare*/
   private ResultSetType resultSetType;
-  private SqlSource sqlSource;
+  private SqlSource sqlSource;             /* sql语句 ，动态sql-DynamicSqlSource、  静态sql- RawSqlSource  */
   private Cache cache;
-  private ParameterMap parameterMap;
+  private ParameterMap parameterMap;      /* 参数类型 - parameterType */
   private List<ResultMap> resultMaps;
   private boolean flushCacheRequired;
   private boolean useCache;
   private boolean resultOrdered;
-  private SqlCommandType sqlCommandType;
+  private SqlCommandType sqlCommandType;   /* sql类型 */
   private KeyGenerator keyGenerator;
-  private String[] keyProperties;
+  private String[] keyProperties;          /* 主键字段 */
   private String[] keyColumns;
   private boolean hasNestedResultMaps;
   private String databaseId;

@@ -23,7 +23,7 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  */
-public class WhereSqlNode extends TrimSqlNode {
+public class WhereSqlNode extends TrimSqlNode { /* where节点 */
 
   private static List<String> prefixList = Arrays.asList("AND ","OR ","AND\n", "OR\n", "AND\r", "OR\r", "AND\t", "OR\t");
 

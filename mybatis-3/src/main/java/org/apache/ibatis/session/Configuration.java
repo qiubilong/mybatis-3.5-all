@@ -145,13 +145,13 @@ public class Configuration {
    */
   protected Class<?> configurationFactory;
 
-  /* Mapper映射 - 注册器  */
+  /* Mapper Interface - 注册器 --> 用于生成Mapper接口代理  */
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
 
   /* 插件拦截器  */
   protected final InterceptorChain interceptorChain = new InterceptorChain();
 
-  /* 类型处理器 --> 设置参数 / 获取结果   */
+  /* 数据类型处理器 --> 设置参数 / 获取结果   */
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
 
   /* 别名 - 注册器 */
@@ -159,15 +159,18 @@ public class Configuration {
 
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
+  /*  namespace+id  <-->  sql映射语句  */
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection")
       .conflictMessageProducer((savedValue, targetValue) ->
           ". please check " + savedValue.getResource() + " and " + targetValue.getResource());
   protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
+
+  /* namespace+id <-->  结果映射器  */
   protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
   protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<>("Key Generators collection");
 
-  protected final Set<String> loadedResources = new HashSet<>();
+  protected final Set<String> loadedResources = new HashSet<>(); /* 解析标记 */
   protected final Map<String, XNode> sqlFragments = new StrictMap<>("XML fragments parsed from previous mappers");
 
   protected final Collection<XMLStatementBuilder> incompleteStatements = new LinkedList<>();

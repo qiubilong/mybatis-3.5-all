@@ -30,7 +30,7 @@ public class ResultMapResolver {
   private final Class<?> type;
   private final String extend;
   private final Discriminator discriminator;
-  private final List<ResultMapping> resultMappings;
+  private final List<ResultMapping> resultMappings; /* 字段映射列表 */
   private final Boolean autoMapping;
 
   public ResultMapResolver(MapperBuilderAssistant assistant, String id, Class<?> type, String extend, Discriminator discriminator, List<ResultMapping> resultMappings, Boolean autoMapping) {

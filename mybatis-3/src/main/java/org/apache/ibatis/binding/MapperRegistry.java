@@ -64,12 +64,12 @@ public class MapperRegistry {
       }
       boolean loadCompleted = false;
       try {
-        knownMappers.put(type, new MapperProxyFactory<>(type));
+        knownMappers.put(type, new MapperProxyFactory<>(type)); /* interface 代理生成工厂 */
         // It's important that the type is added before the parser is run
         // otherwise the binding may automatically be attempted by the
         // mapper parser. If the type is already known, it won't try.
         MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
-        parser.parse();
+        parser.parse(); /* 解析Interface */
         loadCompleted = true;
       } finally {
         if (!loadCompleted) {
@@ -93,7 +93,7 @@ public class MapperRegistry {
     ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
     resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
     Set<Class<? extends Class<?>>> mapperSet = resolverUtil.getClasses();
-    for (Class<?> mapperClass : mapperSet) {
+    for (Class<?> mapperClass : mapperSet) {/* 遍历包路径下所有类 */
       addMapper(mapperClass);
     }
   }

@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.experiment.mapper.UserMapper">
+    <!--开启二级缓存-->
    <!-- <cache ></cache>-->
     <!-- Mybatis 是如何将 sql 执行结果封装为目标对象并返回的？都有哪些映射形式？-->
     <resultMap id="result" type="com.experiment.entity.User">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="create_time" jdbcType="DATE" property="createTime"/>
-        <!--<collection property="" select=""-->
-
     </resultMap>
 
 

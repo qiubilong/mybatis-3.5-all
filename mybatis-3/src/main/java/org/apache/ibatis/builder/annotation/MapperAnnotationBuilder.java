@@ -104,7 +104,7 @@ public class MapperAnnotationBuilder {
   private final MapperBuilderAssistant assistant;
   private final Class<?> type;
 
-  static {
+  static {         /* sql注解 */
     SQL_ANNOTATION_TYPES.add(Select.class);
     SQL_ANNOTATION_TYPES.add(Insert.class);
     SQL_ANNOTATION_TYPES.add(Update.class);
@@ -126,13 +126,13 @@ public class MapperAnnotationBuilder {
   public void parse() {
     String resource = type.toString();
     if (!configuration.isResourceLoaded(resource)) {
-      loadXmlResource();
+      loadXmlResource();                 /* 解析Interface对应同路径的xml */
       configuration.addLoadedResource(resource);
-      assistant.setCurrentNamespace(type.getName());
+      assistant.setCurrentNamespace(type.getName());/* 保证xmlMapper的命名空间必须和全类名相同 */
       parseCache();
       parseCacheRef();
       Method[] methods = type.getMethods();
-      for (Method method : methods) {
+      for (Method method : methods) {   /* 遍历method，解析sql注解 */
         try {
           // issue #237
           if (!method.isBridge()) {
@@ -166,6 +166,7 @@ public class MapperAnnotationBuilder {
     // to prevent loading again a resource twice
     // this flag is set at XMLMapperBuilder#bindMapperForNamespace
     if (!configuration.isResourceLoaded("namespace:" + type.getName())) {
+      /* interface对应的同路径XMLMapper */
       String xmlResource = type.getName().replace('.', '/') + ".xml";
       // #1347
       InputStream inputStream = type.getResourceAsStream("/" + xmlResource);
@@ -179,7 +180,7 @@ public class MapperAnnotationBuilder {
       }
       if (inputStream != null) {
         XMLMapperBuilder xmlParser = new XMLMapperBuilder(inputStream, assistant.getConfiguration(), xmlResource, configuration.getSqlFragments(), type.getName());
-        xmlParser.parse();
+        xmlParser.parse(); /* 解析xml映射文件 */
       }
     }
   }

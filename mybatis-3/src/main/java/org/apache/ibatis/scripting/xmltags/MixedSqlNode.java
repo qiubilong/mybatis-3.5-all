@@ -21,7 +21,7 @@ import java.util.List;
  * @author Clinton Begin
  */
 public class MixedSqlNode implements SqlNode {
-  private final List<SqlNode> contents;
+  private final List<SqlNode> contents; /* sql节点列表 */
 
   public MixedSqlNode(List<SqlNode> contents) {
     this.contents = contents;

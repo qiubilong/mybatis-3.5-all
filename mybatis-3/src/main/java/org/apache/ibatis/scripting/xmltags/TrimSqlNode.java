@@ -32,7 +32,7 @@ public class TrimSqlNode implements SqlNode {
   private final SqlNode contents;
   private final String prefix;
   private final String suffix;
-  private final List<String> prefixesToOverride;
+  private final List<String> prefixesToOverride;  /* 删除的前缀 */
   private final List<String> suffixesToOverride;
   private final Configuration configuration;
 

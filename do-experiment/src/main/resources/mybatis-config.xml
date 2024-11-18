@@ -15,7 +15,7 @@
 
    <!-- 别名 - 配置，就是类名简称-->
     <typeAliases>
-        <typeAlias alias="blog" type="domain.blog.Blog"/>
+      <!--  <typeAlias alias="blog" type="domain.blog.Blog"/>-->
         <!-- 别名扫描，没有指定注解时@Alias("xxx")，使用类名（首字符小写）作为别名-->
         <package name="com.experiment.entity"/>
 
