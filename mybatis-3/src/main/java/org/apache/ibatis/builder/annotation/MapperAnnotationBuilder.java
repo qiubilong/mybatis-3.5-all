@@ -136,7 +136,7 @@ public class MapperAnnotationBuilder {
         try {
           // issue #237
           if (!method.isBridge()) {
-            parseStatement(method);
+            parseStatement(method);  /* 解析sql语句*/
           }
         } catch (IncompleteElementException e) {
           configuration.addIncompleteMethod(new MethodResolver(this, method));

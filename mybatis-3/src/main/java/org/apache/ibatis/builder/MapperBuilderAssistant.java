@@ -325,14 +325,14 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return parameterMap;
   }
 
-  private List<ResultMap> getStatementResultMaps(
+  private List<ResultMap> getStatementResultMaps(  /* 结果映射 */
       String resultMap,
       Class<?> resultType,
       String statementId) {
     resultMap = applyCurrentNamespace(resultMap, true);
 
     List<ResultMap> resultMaps = new ArrayList<>();
-    if (resultMap != null) {
+    if (resultMap != null) {          /* 1、优先resultMap */
       String[] resultMapNames = resultMap.split(",");
       for (String resultMapName : resultMapNames) {
         try {
@@ -341,7 +341,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
           throw new IncompleteElementException("Could not find result map '" + resultMapName + "' referenced from '" + statementId + "'", e);
         }
       }
-    } else if (resultType != null) {
+    } else if (resultType != null) {  /* 2、再检查resultType */
       ResultMap inlineResultMap = new ResultMap.Builder(
           configuration,
           statementId + "-Inline",

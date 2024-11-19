@@ -28,7 +28,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * @author Clinton Begin
  */
-public class ResultMapping {             /* 字段映射 */
+public class ResultMapping { /* 字段映射 ， java属性 <--> 数据表字段   */
 
   private Configuration configuration;   /* 全局配置 */
   private String property;               /* javaBean属性名 */

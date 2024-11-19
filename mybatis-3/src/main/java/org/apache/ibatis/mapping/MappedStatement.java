@@ -37,12 +37,12 @@ public final class MappedStatement { /* sql映射语句 */
   private String id;                        /* namespace + id */
   private Integer fetchSize;
   private Integer timeout;
-  private StatementType statementType;      /* sql执行方式 ,默认prepare*/
+  private StatementType statementType;      /* sql语句执行方式 ,默认prepare*/
   private ResultSetType resultSetType;
   private SqlSource sqlSource;             /* sql语句 ，动态sql-DynamicSqlSource、  静态sql- RawSqlSource  */
   private Cache cache;
   private ParameterMap parameterMap;      /* 参数类型 - parameterType */
-  private List<ResultMap> resultMaps;
+  private List<ResultMap> resultMaps;     /* 结果映射，优先resultMap > resultType */
   private boolean flushCacheRequired;
   private boolean useCache;
   private boolean resultOrdered;
