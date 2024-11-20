@@ -68,7 +68,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  * @author Iwao AVE!
  * @author Kazuki Shimizu
  */
-public class DefaultResultSetHandler implements ResultSetHandler {
+public class DefaultResultSetHandler implements ResultSetHandler { /* 结果集处理器 */
 
   private static final Object DEFERRED = new Object();
 
@@ -181,17 +181,18 @@ public class DefaultResultSetHandler implements ResultSetHandler {
   public List<Object> handleResultSets(Statement stmt) throws SQLException {
     ErrorContext.instance().activity("handling results").object(mappedStatement.getId());
 
-    final List<Object> multipleResults = new ArrayList<>();
+    final List<Object> multipleResults = new ArrayList<>();//结果列表
 
     int resultSetCount = 0;
     /* 获取结果集 - stmt.getResultSet(); */
     ResultSetWrapper rsw = getFirstResultSet(stmt);
-    /* 结果映射 */
+    /* 结果映射配置 */
     List<ResultMap> resultMaps = mappedStatement.getResultMaps();
     int resultMapCount = resultMaps.size();
     validateResultMapsCount(rsw, resultMapCount);
-    while (rsw != null && resultMapCount > resultSetCount) {
+    while (rsw != null && resultMapCount > resultSetCount) {//一般都是单个结果映射
       ResultMap resultMap = resultMaps.get(resultSetCount);
+      /* 根据结果映射配置 - 处理返回结果 */
       handleResultSet(rsw, resultMap, multipleResults, null);
       rsw = getNextResultSet(stmt);
       cleanUpAfterHandlingResultSet();
@@ -299,6 +300,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
       } else {
         if (resultHandler == null) {
           DefaultResultHandler defaultResultHandler = new DefaultResultHandler(objectFactory);
+          /* 处理结果 */
           handleRowValues(rsw, resultMap, defaultResultHandler, rowBounds, null);
           multipleResults.add(defaultResultHandler.getResultList());
         } else {
@@ -326,6 +328,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
       checkResultHandler();
       handleRowValuesForNestedResultMap(rsw, resultMap, resultHandler, rowBounds, parentMapping);
     } else {
+      /* 处理结果 */
       handleRowValuesForSimpleResultMap(rsw, resultMap, resultHandler, rowBounds, parentMapping);
     }
   }
@@ -395,6 +398,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
   private Object getRowValue(ResultSetWrapper rsw, ResultMap resultMap, String columnPrefix) throws SQLException {
     final ResultLoaderMap lazyLoader = new ResultLoaderMap();
+    /* 实例化返回对象 */
     Object rowValue = createResultObject(rsw, resultMap, lazyLoader, columnPrefix);
     if (rowValue != null && !hasTypeHandlerForResultObject(rsw, resultMap.getType())) {
       final MetaObject metaObject = configuration.newMetaObject(rowValue);
@@ -402,6 +406,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
       if (shouldApplyAutomaticMappings(resultMap, false)) {
         foundValues = applyAutomaticMappings(rsw, resultMap, metaObject, columnPrefix) || foundValues;
       }
+      /* javaBean对象属性赋值 */
       foundValues = applyPropertyMappings(rsw, resultMap, metaObject, lazyLoader, columnPrefix) || foundValues;
       foundValues = lazyLoader.size() > 0 || foundValues;
       rowValue = foundValues || configuration.isReturnInstanceForEmptyRow() ? rowValue : null;
@@ -430,7 +435,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     final List<String> mappedColumnNames = rsw.getMappedColumnNames(resultMap, columnPrefix);
     boolean foundValues = false;
     final List<ResultMapping> propertyMappings = resultMap.getPropertyResultMappings();
-    for (ResultMapping propertyMapping : propertyMappings) {
+    for (ResultMapping propertyMapping : propertyMappings) { /* 遍历javaBean属性字段 */
       String column = prependPrefix(propertyMapping.getColumn(), columnPrefix);
       if (propertyMapping.getNestedResultMapId() != null) {
         // the user added a column attribute to a nested result map, ignore it
@@ -439,6 +444,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
       if (propertyMapping.isCompositeResult()
           || (column != null && mappedColumnNames.contains(column.toUpperCase(Locale.ENGLISH)))
           || propertyMapping.getResultSet() != null) {
+        /* 获取表字段值 */
         Object value = getPropertyMappingValue(rsw.getResultSet(), metaObject, propertyMapping, lazyLoader, columnPrefix);
         // issue #541 make property optional
         final String property = propertyMapping.getProperty();
@@ -453,6 +459,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         }
         if (value != null || (configuration.isCallSettersOnNulls() && !metaObject.getSetterType(property).isPrimitive())) {
           // gcode issue #377, call setter on nulls (value is not 'found')
+          /* 设置javaBean属性值 */
           metaObject.setValue(property, value);
         }
       }
@@ -468,6 +475,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
       addPendingChildRelation(rs, metaResultObject, propertyMapping);   // TODO is that OK?
       return DEFERRED;
     } else {
+      /* 数据获取处理器 */
       final TypeHandler<?> typeHandler = propertyMapping.getTypeHandler();
       final String column = prependPrefix(propertyMapping.getColumn(), columnPrefix);
       return typeHandler.getResult(rs, column);
@@ -606,7 +614,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
   private Object createResultObject(ResultSetWrapper rsw, ResultMap resultMap, List<Class<?>> constructorArgTypes, List<Object> constructorArgs, String columnPrefix)
       throws SQLException {
-    final Class<?> resultType = resultMap.getType();
+    final Class<?> resultType = resultMap.getType();/* 返回类型 */
     final MetaClass metaType = MetaClass.forClass(resultType, reflectorFactory);
     final List<ResultMapping> constructorMappings = resultMap.getConstructorResultMappings();
     if (hasTypeHandlerForResultObject(rsw, resultType)) {
@@ -614,7 +622,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     } else if (!constructorMappings.isEmpty()) {
       return createParameterizedResultObject(rsw, resultType, constructorMappings, constructorArgTypes, constructorArgs, columnPrefix);
     } else if (resultType.isInterface() || metaType.hasDefaultConstructor()) {
-      return objectFactory.create(resultType);
+      return objectFactory.create(resultType);/* 实例化返回类型 */
     } else if (shouldApplyAutomaticMappings(resultMap, false)) {
       return createByConstructorSignature(rsw, resultType, constructorArgTypes, constructorArgs);
     }

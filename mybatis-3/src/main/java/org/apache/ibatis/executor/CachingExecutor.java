@@ -39,7 +39,7 @@ import org.apache.ibatis.transaction.Transaction;
 public class CachingExecutor implements Executor {
 
   private final Executor delegate; /* SimpleExecutor */
-  private final TransactionalCacheManager tcm = new TransactionalCacheManager();
+  private final TransactionalCacheManager tcm = new TransactionalCacheManager(); //mapper缓存，不建议使用
 
   public CachingExecutor(Executor delegate) {
     this.delegate = delegate;

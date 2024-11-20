@@ -44,7 +44,7 @@ public class TestJDBC {
 
             //处理结果集
             ResultSet rs = pstmt.getResultSet();
-            if (rs.next()) {
+            if (rs.next()) {//处理一行数据
                 User user = new User();
                 user.setId(rs.getLong("id"));
                 user.setUserName(rs.getString("user_name"));

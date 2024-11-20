@@ -53,16 +53,26 @@ public class SimpleExecutor extends BaseExecutor {
     }
   }
 
-  @Override /* DefaultSqlSession.selectList --> BaseExecutor.queryFromDatabase() --> doQuery */
+  // 大概执行链 DefaultSqlSession.selectList --> BaseExecutor.queryFromDatabase() --> doQuery
+  /*
+  *     数据库查询核心入口
+  *
+  *    获取数据库Connection --> 执行预处理
+  *    设置参数 --> DefaultParameterHandler
+  *    处理结果 --> DefaultResultSetHandler
+  *
+  */
+  @Override
   public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
     Statement stmt = null;
     try {
       Configuration configuration = ms.getConfiguration();
       /* 预处理语句处理器 PreparedStatementHandler = （参数处理）DefaultParameterHandler + （结果处理）DefaultResultSetHandler */
       StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
-      //PreparedStatementLogger.
+      /* 获取数据库Connection -- 执行预处理 -- 设置参数 */
       stmt = prepareStatement(handler, ms.getStatementLog());
-      return handler.query(stmt, resultHandler);
+      /* 执行SQL -- 处理返回结果 */
+      return handler.query(stmt, resultHandler); //RoutingStatementHandler -- PreparedStatementHandler
     } finally {
       closeStatement(stmt);
     }
@@ -87,9 +97,9 @@ public class SimpleExecutor extends BaseExecutor {
     Statement stmt;
     /* 获取连接 */
     Connection connection = getConnection(statementLog);
-    /* 执行底层jdbc预处理 */
+    /* 执行底层jdbc预处理，返回PreparedStatement */
     stmt = handler.prepare(connection, transaction.getTimeout());
-    /* 参数设置 */
+    /* PreparedStatementHandler 参数设置 */
     handler.parameterize(stmt);
     return stmt;
   }

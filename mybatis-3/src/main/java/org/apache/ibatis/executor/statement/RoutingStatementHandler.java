@@ -54,7 +54,7 @@ public class RoutingStatementHandler implements StatementHandler {
 
   }
 
-  @Override /* 预处理sql- PreparedStatementHandler */
+  @Override /* 预处理sql- PreparedStatementHandler--BaseStatementHandler */
   public Statement prepare(Connection connection, Integer transactionTimeout) throws SQLException {
     return delegate.prepare(connection, transactionTimeout);
   }

@@ -55,7 +55,7 @@ public abstract class BaseExecutor implements Executor {
   protected Executor wrapper;        /* 子类 SimpleExecutor，开启缓存时覆盖为CachingExecutor */
 
   protected ConcurrentLinkedQueue<DeferredLoad> deferredLoads;
-  protected PerpetualCache localCache; //永久缓存
+  protected PerpetualCache localCache;   /* session缓存 */
   protected PerpetualCache localOutputParameterCache;
   protected Configuration configuration;  /* 全局配置 */
 
@@ -137,7 +137,7 @@ public abstract class BaseExecutor implements Executor {
   }
 
   @SuppressWarnings("unchecked")
-  @Override
+  @Override /* 这里主要是对select进行session级别缓存 */
   public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
     ErrorContext.instance().resource(ms.getResource()).activity("executing a query").object(ms.getId());
     if (closed) {
@@ -149,11 +149,12 @@ public abstract class BaseExecutor implements Executor {
     List<E> list;
     try {
       queryStack++;
-      list = resultHandler == null ? (List<E>) localCache.getObject(key) : null;
+      list = resultHandler == null ? (List<E>) localCache.getObject(key) : null; /* session缓存 */
       if (list != null) {
         handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
       } else {
-        list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);/* 执行查询 */
+        /* 无缓存 --> 查询数据库 */
+        list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);
       }
     } finally {
       queryStack--;
@@ -321,7 +322,7 @@ public abstract class BaseExecutor implements Executor {
     List<E> list;
     localCache.putObject(key, EXECUTION_PLACEHOLDER);
     try {
-      /* 子类 SimpleExecutor.doQuery */
+      /* 调用子类SimpleExecutor.doQuery */
       list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
     } finally {
       localCache.removeObject(key);

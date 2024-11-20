@@ -22,10 +22,8 @@ public class App {
 
         SqlSession session = sqlSessionFactory.openSession(); /* DefaultSqlSessionFactory.openSession()  */
         try {
-            // 执行查询 底层执行jdbc 3
-            User user =  session.selectOne("com.experiment.mapper.UserMapper.selectById", 1);
-
-            User user2 =  session.selectOne("com.experiment.mapper.UserMapper.selectById", 1);
+            // 执行查询
+            User user =  session.selectOne("com.experiment.mapper.UserMapper.selectById", 2233);
 
             // 创建动态代理
             MomentCommentExtMapper commentExtMapper = session.getMapper(MomentCommentExtMapper.class);
