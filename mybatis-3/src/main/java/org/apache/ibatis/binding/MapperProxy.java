@@ -73,7 +73,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {  /* Map
     }
     lookupConstructor = lookup;
   }
-  /* 被代理对象方法执行总入口  */
+  /* 拦截被代理方法 - 总入口  */
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {

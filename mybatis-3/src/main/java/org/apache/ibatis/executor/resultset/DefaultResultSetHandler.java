@@ -302,7 +302,7 @@ public class DefaultResultSetHandler implements ResultSetHandler { /* 结果集�
           DefaultResultHandler defaultResultHandler = new DefaultResultHandler(objectFactory);
           /* 处理结果 */
           handleRowValues(rsw, resultMap, defaultResultHandler, rowBounds, null);
-          multipleResults.add(defaultResultHandler.getResultList());
+          multipleResults.add(defaultResultHandler.getResultList());//集合中的集合
         } else {
           handleRowValues(rsw, resultMap, resultHandler, rowBounds, null);
         }
@@ -314,7 +314,7 @@ public class DefaultResultSetHandler implements ResultSetHandler { /* 结果集�
   }
 
   @SuppressWarnings("unchecked")
-  private List<Object> collapseSingleResultList(List<Object> multipleResults) {
+  private List<Object> collapseSingleResultList(List<Object> multipleResults) {/* List中的List */
     return multipleResults.size() == 1 ? (List<Object>) multipleResults.get(0) : multipleResults;
   }
 
@@ -353,8 +353,10 @@ public class DefaultResultSetHandler implements ResultSetHandler { /* 结果集�
     DefaultResultContext<Object> resultContext = new DefaultResultContext<>();
     ResultSet resultSet = rsw.getResultSet();
     skipRows(resultSet, rowBounds);
-    while (shouldProcessMoreRows(resultContext, rowBounds) && !resultSet.isClosed() && resultSet.next()) {
+    while (shouldProcessMoreRows(resultContext, rowBounds) && !resultSet.isClosed() && resultSet.next()) {/* 遍历数据行 */
+      /* 数据结果映射器 */
       ResultMap discriminatedResultMap = resolveDiscriminatedResultMap(resultSet, resultMap, null);
+      /* 处理数据 */
       Object rowValue = getRowValue(rsw, discriminatedResultMap, null);
       storeObject(resultHandler, resultContext, rowValue, parentMapping, resultSet);
     }
@@ -371,7 +373,7 @@ public class DefaultResultSetHandler implements ResultSetHandler { /* 结果集�
   @SuppressWarnings("unchecked" /* because ResultHandler<?> is always ResultHandler<Object>*/)
   private void callResultHandler(ResultHandler<?> resultHandler, DefaultResultContext<Object> resultContext, Object rowValue) {
     resultContext.nextResultObject(rowValue);
-    ((ResultHandler<Object>) resultHandler).handleResult(resultContext);
+    ((ResultHandler<Object>) resultHandler).handleResult(resultContext);//DefaultResultHandler添加到集合List
   }
 
   private boolean shouldProcessMoreRows(ResultContext<?> context, RowBounds rowBounds) {
@@ -398,7 +400,7 @@ public class DefaultResultSetHandler implements ResultSetHandler { /* 结果集�
 
   private Object getRowValue(ResultSetWrapper rsw, ResultMap resultMap, String columnPrefix) throws SQLException {
     final ResultLoaderMap lazyLoader = new ResultLoaderMap();
-    /* 实例化返回对象 */
+    /* 实例化返回javaBean对象 */
     Object rowValue = createResultObject(rsw, resultMap, lazyLoader, columnPrefix);
     if (rowValue != null && !hasTypeHandlerForResultObject(rsw, resultMap.getType())) {
       final MetaObject metaObject = configuration.newMetaObject(rowValue);

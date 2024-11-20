@@ -77,7 +77,7 @@ public class MapperMethod {
           executeWithResultHandler(sqlSession, args);
           result = null;
         } else if (method.returnsMany()) {
-          result = executeForMany(sqlSession, args);
+          result = executeForMany(sqlSession, args);/* 查询列表List */
         } else if (method.returnsMap()) {
           result = executeForMap(sqlSession, args);
         } else if (method.returnsCursor()) {
@@ -139,12 +139,12 @@ public class MapperMethod {
 
   private <E> Object executeForMany(SqlSession sqlSession, Object[] args) {
     List<E> result;
-    Object param = method.convertArgsToSqlCommandParam(args);
+    Object param = method.convertArgsToSqlCommandParam(args);/* 单个参数返回本身，多个返回map */
     if (method.hasRowBounds()) {
       RowBounds rowBounds = method.extractRowBounds(args);
       result = sqlSession.selectList(command.getName(), param, rowBounds);
     } else {
-      result = sqlSession.selectList(command.getName(), param);
+      result = sqlSession.selectList(command.getName(), param);/* DefaultSqlSession.selectList */
     }
     // issue #510 Collections & arrays support
     if (!method.getReturnType().isAssignableFrom(result.getClass())) {

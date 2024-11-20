@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.experiment.mapper.UserMapper">
-    <!--开启二级缓存-->
+    <!--开启二级缓存，建议关闭  -->
    <!-- <cache ></cache>-->
     <!-- Mybatis 是如何将 sql 执行结果封装为目标对象并返回的？都有哪些映射形式？-->
-    <resultMap id="result" type="com.experiment.entity.User">
+    <resultMap id="resultUser" type="com.experiment.entity.User">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="create_time" jdbcType="DATE" property="createTime"/>
     </resultMap>
 
 
-    <select id="selectById" resultMap="result"  >
+    <select id="selectById" resultMap="resultUser"  >
         select id,user_name,create_time from t_user
         <where>
             <if test="id > 0">
@@ -21,6 +21,13 @@
         </where>
     </select>
 
+
+    <select id="selectList" parameterType="com.experiment.entity.User" resultMap="resultUser">
+        select id,user_name,create_time from t_user
+        <where>
+            <if test="userName != null "> and user_name like #{userName}</if>
+        </where>
+    </select>
 
     <!--
       动态sql数据源  需要在调用crud 解析sql
