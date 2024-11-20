@@ -7,8 +7,10 @@
         <property name="myName" value="xxxx"/>
     </properties>
 
-    <!--全局 - 配置-->
+    <!--全局配置 Configuration   -->
     <settings>
+       <!-- 开启mapper级别缓存，CachingExecutor，建议关闭-->
+        <setting name="cacheEnabled" value="false"/>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="useGeneratedKeys" value="true"/>
     </settings>
