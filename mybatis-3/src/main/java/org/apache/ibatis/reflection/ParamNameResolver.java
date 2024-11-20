@@ -49,14 +49,14 @@ public class ParamNameResolver {
 
   private boolean hasParamAnnotation;
 
-  public ParamNameResolver(Configuration config, Method method) {
+  public ParamNameResolver(Configuration config, Method method) {  /* 解析方法参数名 */
     final Class<?>[] paramTypes = method.getParameterTypes();
-    final Annotation[][] paramAnnotations = method.getParameterAnnotations();
+    final Annotation[][] paramAnnotations = method.getParameterAnnotations();/* 获取参数列表和其对应的注解 */
     final SortedMap<Integer, String> map = new TreeMap<>();
     int paramCount = paramAnnotations.length;
     // get names from @Param annotations
     for (int paramIndex = 0; paramIndex < paramCount; paramIndex++) {
-      if (isSpecialParameter(paramTypes[paramIndex])) {
+      if (isSpecialParameter(paramTypes[paramIndex])) {  //跳过RowBounds
         // skip special parameters
         continue;
       }
@@ -64,19 +64,19 @@ public class ParamNameResolver {
       for (Annotation annotation : paramAnnotations[paramIndex]) {
         if (annotation instanceof Param) {
           hasParamAnnotation = true;
-          name = ((Param) annotation).value();
+          name = ((Param) annotation).value();             /* 1、@Param注解定义的参数名字 */
           break;
         }
       }
       if (name == null) {
         // @Param was not specified.
         if (config.isUseActualParamName()) {
-          name = getActualParamName(method, paramIndex);
+          name = getActualParamName(method, paramIndex);   /* 2、原始方法的参数名字 */
         }
         if (name == null) {
           // use the parameter index as the name ("0", "1", ...)
           // gcode issue #71
-          name = String.valueOf(map.size());
+          name = String.valueOf(map.size());               /* 3、使用索引标号 */
         }
       }
       map.put(paramIndex, name);

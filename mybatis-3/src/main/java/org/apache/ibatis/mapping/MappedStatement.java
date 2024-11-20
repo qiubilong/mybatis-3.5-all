@@ -46,7 +46,7 @@ public final class MappedStatement { /* sql映射语句 */
   private boolean flushCacheRequired;
   private boolean useCache;
   private boolean resultOrdered;
-  private SqlCommandType sqlCommandType;   /* sql类型 */
+  private SqlCommandType sqlCommandType;   /* sql命令类型 */
   private KeyGenerator keyGenerator;
   private String[] keyProperties;          /* 主键字段 */
   private String[] keyColumns;

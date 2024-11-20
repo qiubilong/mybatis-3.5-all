@@ -70,7 +70,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     // Include Fragments before parsing
     XMLIncludeTransformer includeParser = new XMLIncludeTransformer(configuration, builderAssistant);
     includeParser.applyIncludes(context.getNode());
-    /* 解析参数类型 */
+    /* 解析 - 参数类型 */
     String parameterType = context.getStringAttribute("parameterType");
     Class<?> parameterTypeClass = resolveClass(parameterType);
 

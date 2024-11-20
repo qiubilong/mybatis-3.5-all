@@ -41,14 +41,14 @@ public class SqlSourceBuilder extends BaseBuilder {
 
   public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
     ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
-    GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
+    GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);/* 将#{}替换成?，并且记录参数名字 */
     String sql = parser.parse(originalSql);
     return new StaticSqlSource(configuration, sql, handler.getParameterMappings());
   }
 
   private static class ParameterMappingTokenHandler extends BaseBuilder implements TokenHandler {
 
-    private List<ParameterMapping> parameterMappings = new ArrayList<>();
+    private List<ParameterMapping> parameterMappings = new ArrayList<>();/* 参数列表 */
     private Class<?> parameterType;
     private MetaObject metaParameters;
 

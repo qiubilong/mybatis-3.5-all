@@ -1,6 +1,7 @@
 package com.experiment;
 
 import com.experiment.entity.User;
+import com.experiment.mapper.MomentCommentExtMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,10 +28,9 @@ public class App {
             User user2 =  session.selectOne("com.experiment.mapper.UserMapper.selectById", 1);
 
             // 创建动态代理
-           /* UserMapper mapper = session.getMapper(UserMapper.class);
-            System.out.println(mapper.getClass());
-            User user = mapper.selectById(1);*/
-            System.out.println(user.getUserName());
+            MomentCommentExtMapper commentExtMapper = session.getMapper(MomentCommentExtMapper.class);
+            System.out.println(commentExtMapper.getClass());
+            Integer updateCommentReplyNum = commentExtMapper.updateCommentReplyNum(121L,3);
 
             session.commit();
         } catch (Exception e) {

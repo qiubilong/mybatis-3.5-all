@@ -13,7 +13,7 @@
 
 
     <select id="selectById" resultMap="result"  >
-        select id,user_name,create_time from t_userx
+        select id,user_name,create_time from t_user
         <where>
             <if test="id > 0">
                 and id=#{id}

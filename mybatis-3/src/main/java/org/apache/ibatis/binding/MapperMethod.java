@@ -46,8 +46,8 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class MapperMethod {
 
-  private final SqlCommand command;
-  private final MethodSignature method;
+  private final SqlCommand command;        /* sql命令类型 */
+  private final MethodSignature method;    /* 方法信息，主要包括返回值类型，@Param参数列表 */
 
   public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
     this.command = new SqlCommand(config, mapperInterface, method);
@@ -292,7 +292,7 @@ public class MapperMethod {
       } else if (resolvedReturnType instanceof ParameterizedType) {
         this.returnType = (Class<?>) ((ParameterizedType) resolvedReturnType).getRawType();
       } else {
-        this.returnType = method.getReturnType();
+        this.returnType = method.getReturnType();  /* 解析返回值类型 */
       }
       this.returnsVoid = void.class.equals(this.returnType);
       this.returnsMany = configuration.getObjectFactory().isCollection(this.returnType) || this.returnType.isArray();
@@ -302,7 +302,7 @@ public class MapperMethod {
       this.returnsMap = this.mapKey != null;
       this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);
       this.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);
-      this.paramNameResolver = new ParamNameResolver(configuration, method);
+      this.paramNameResolver = new ParamNameResolver(configuration, method); /* 解析参数列表 */
     }
 
     public Object convertArgsToSqlCommandParam(Object[] args) {

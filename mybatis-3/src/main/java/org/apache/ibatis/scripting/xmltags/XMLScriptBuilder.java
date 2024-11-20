@@ -64,7 +64,7 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   public SqlSource parseScriptNode() {
-    MixedSqlNode rootSqlNode = parseDynamicTags(context);/* 解析sql节点 */
+    MixedSqlNode rootSqlNode = parseDynamicTags(context);/* 解析sql语句 */
     SqlSource sqlSource;
     if (isDynamic) { /* 出现where、if、foreach、${}关键字都是动态sql */
       sqlSource = new DynamicSqlSource(configuration, rootSqlNode);

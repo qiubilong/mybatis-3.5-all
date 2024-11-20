@@ -38,7 +38,7 @@ public class XMLLanguageDriver implements LanguageDriver {
     return new DefaultParameterHandler(mappedStatement, parameterObject, boundSql);
   }
 
-  @Override
+  @Override /* 解析xml中sql语句 */
   public SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType) {
     XMLScriptBuilder builder = new XMLScriptBuilder(configuration, script, parameterType);
     return builder.parseScriptNode();

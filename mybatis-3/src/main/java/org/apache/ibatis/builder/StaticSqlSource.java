@@ -26,9 +26,9 @@ import org.apache.ibatis.session.Configuration;
  * @author Clinton Begin
  */
 public class StaticSqlSource implements SqlSource {
-
-  private final String sql;
-  private final List<ParameterMapping> parameterMappings;
+                               /* 原始sql = @Update( "update moment_comment set reply_num = reply_num + #{changeNum} where id = #{commentId}")   */
+  private final String sql; /* 参数替换成?的sql语句，例如 update moment_comment set reply_num = reply_num + ? where id = ?  */
+  private final List<ParameterMapping> parameterMappings; /* 参数列表 - changeNum，commentId */
   private final Configuration configuration;
 
   public StaticSqlSource(Configuration configuration, String sql) {
