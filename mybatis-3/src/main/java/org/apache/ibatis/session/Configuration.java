@@ -623,7 +623,7 @@ public class Configuration {
     } else {
       executor = new SimpleExecutor(this, transaction); /* 默认创建 SimpleExecutor */
     }
-    if (cacheEnabled) { /* 默认开启缓存*/
+    if (cacheEnabled) { /* 默认开启缓存Mapper缓存，建议关闭  */
       executor = new CachingExecutor(executor);
     }
     /* 拓展点 - 生成插件代理 */
