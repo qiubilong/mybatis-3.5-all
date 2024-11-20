@@ -24,8 +24,9 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * 动态DynamicSqlSource最终也会解析成StaticSqlSource
  */
-public class StaticSqlSource implements SqlSource {
+public class StaticSqlSource implements SqlSource { //静态sql
                                /* 原始sql = @Update( "update moment_comment set reply_num = reply_num + #{changeNum} where id = #{commentId}")   */
   private final String sql; /* 参数替换成?的sql语句，例如 update moment_comment set reply_num = reply_num + ? where id = ?  */
   private final List<ParameterMapping> parameterMappings; /* 参数列表 - changeNum，commentId */
@@ -41,7 +42,7 @@ public class StaticSqlSource implements SqlSource {
     this.configuration = configuration;
   }
 
-  @Override
+  @Override /* 创建sql绑定对象 */
   public BoundSql getBoundSql(Object parameterObject) {
     return new BoundSql(configuration, sql, parameterMappings, parameterObject);
   }

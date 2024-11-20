@@ -49,8 +49,8 @@ public class SqlSourceBuilder extends BaseBuilder {
   private static class ParameterMappingTokenHandler extends BaseBuilder implements TokenHandler {
 
     private List<ParameterMapping> parameterMappings = new ArrayList<>();/* 参数列表 */
-    private Class<?> parameterType;
-    private MetaObject metaParameters;
+    private Class<?> parameterType;     /* 参数类型 */
+    private MetaObject metaParameters;  /* 参数值，DynamicContext.ContextMap  */
 
     public ParameterMappingTokenHandler(Configuration configuration, Class<?> parameterType, Map<String, Object> additionalParameters) {
       super(configuration);

@@ -61,7 +61,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
   @Override
   public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
     PreparedStatement ps = (PreparedStatement) statement;
-    ps.execute();
+    ps.execute();/* 底层JDBC - PreparedStatement -- 执行 */
     return resultSetHandler.handleResultSets(ps);
   }
 
@@ -83,7 +83,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
         return connection.prepareStatement(sql, keyColumnNames);
       }
     } else if (mappedStatement.getResultSetType() == ResultSetType.DEFAULT) {
-      return connection.prepareStatement(sql);
+      return connection.prepareStatement(sql); /* 执行预处理  */
     } else {
       return connection.prepareStatement(sql, mappedStatement.getResultSetType().getValue(), ResultSet.CONCUR_READ_ONLY);
     }

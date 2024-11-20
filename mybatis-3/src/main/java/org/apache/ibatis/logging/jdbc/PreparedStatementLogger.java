@@ -34,14 +34,14 @@ import org.apache.ibatis.reflection.ExceptionUtil;
  */
 public final class PreparedStatementLogger extends BaseJdbcLogger implements InvocationHandler {
 
-  private final PreparedStatement statement;
+  private final PreparedStatement statement; /* jdbc底层对象 */
 
   private PreparedStatementLogger(PreparedStatement stmt, Log statementLog, int queryStack) {
     super(statementLog, queryStack);
     this.statement = stmt;
   }
 
-  @Override
+  @Override /* PreparedStatement方法拦截器 */
   public Object invoke(Object proxy, Method method, Object[] params) throws Throwable {
     try {
       if (Object.class.equals(method.getDeclaringClass())) {

@@ -50,8 +50,11 @@ import org.apache.ibatis.io.Resources;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ *
+ * 类型处理器（typeHandlers）
+ * MyBatis 在设置预处理语句（PreparedStatement）中的参数或从结果集中取出一个值时， 都会用类型处理器将获取到的值以合适的方式转换成 Java 类型。
  */
-public final class TypeHandlerRegistry {
+public final class TypeHandlerRegistry { /* 类型处理器 */
 
   private final Map<JdbcType, TypeHandler<?>>  jdbcTypeHandlerMap = new EnumMap<>(JdbcType.class);
   private final Map<Type, Map<JdbcType, TypeHandler<?>>> typeHandlerMap = new ConcurrentHashMap<>();

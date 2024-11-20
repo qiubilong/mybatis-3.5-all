@@ -63,7 +63,7 @@ public class MapperMethod {
         break;
       }
       case UPDATE: {
-        Object param = method.convertArgsToSqlCommandParam(args);
+        Object param = method.convertArgsToSqlCommandParam(args); /* 单个参数返回参数本身，多个参数返回map */
         result = rowCountResult(sqlSession.update(command.getName(), param));
         break;
       }
@@ -83,8 +83,8 @@ public class MapperMethod {
         } else if (method.returnsCursor()) {
           result = executeForCursor(sqlSession, args);
         } else {
-          Object param = method.convertArgsToSqlCommandParam(args);
-          result = sqlSession.selectOne(command.getName(), param);
+          Object param = method.convertArgsToSqlCommandParam(args);/* 单个参数返回参数本身，多个参数返回map */
+          result = sqlSession.selectOne(command.getName(), param); /* 查询单个对象 */
           if (method.returnsOptional()
               && (result == null || !method.getReturnType().equals(result.getClass()))) {
             result = Optional.ofNullable(result);
@@ -112,7 +112,7 @@ public class MapperMethod {
       result = rowCount;
     } else if (Long.class.equals(method.getReturnType()) || Long.TYPE.equals(method.getReturnType())) {
       result = (long)rowCount;
-    } else if (Boolean.class.equals(method.getReturnType()) || Boolean.TYPE.equals(method.getReturnType())) {
+    } else if (Boolean.class.equals(method.getReturnType()) || Boolean.TYPE.equals(method.getReturnType())) {/* 所以直接返回boolean更方便 */
       result = rowCount > 0;
     } else {
       throw new BindingException("Mapper method '" + command.getName() + "' has an unsupported return type: " + method.getReturnType());

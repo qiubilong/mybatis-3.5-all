@@ -291,7 +291,7 @@ public final class MappedStatement { /* sql映射语句 */
   public String[] getResulSets() {
     return resultSets;
   }
-
+  /* DynamicSqlSource/RawSqlSource --> StaticSqlSource --> BoundSql  */
   public BoundSql getBoundSql(Object parameterObject) {
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();

@@ -177,15 +177,16 @@ public class DefaultResultSetHandler implements ResultSetHandler {
   //
   // HANDLE RESULT SETS
   //
-  @Override
+  @Override /* 处理结果  */
   public List<Object> handleResultSets(Statement stmt) throws SQLException {
     ErrorContext.instance().activity("handling results").object(mappedStatement.getId());
 
     final List<Object> multipleResults = new ArrayList<>();
 
     int resultSetCount = 0;
+    /* 获取结果集 - stmt.getResultSet(); */
     ResultSetWrapper rsw = getFirstResultSet(stmt);
-
+    /* 结果映射 */
     List<ResultMap> resultMaps = mappedStatement.getResultMaps();
     int resultMapCount = resultMaps.size();
     validateResultMapsCount(rsw, resultMapCount);

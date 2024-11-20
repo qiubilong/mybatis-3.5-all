@@ -51,13 +51,13 @@ public abstract class BaseExecutor implements Executor {
 
   private static final Log log = LogFactory.getLog(BaseExecutor.class);
 
-  protected Transaction transaction;
-  protected Executor wrapper;
+  protected Transaction transaction; /* 事务执行器 SpringManagedTransaction / JdbcTransaction*/
+  protected Executor wrapper;        /* 子类 SimpleExecutor，开启缓存时覆盖为CachingExecutor */
 
   protected ConcurrentLinkedQueue<DeferredLoad> deferredLoads;
-  protected PerpetualCache localCache;
+  protected PerpetualCache localCache; //永久缓存
   protected PerpetualCache localOutputParameterCache;
-  protected Configuration configuration;
+  protected Configuration configuration;  /* 全局配置 */
 
   protected int queryStack;
   private boolean closed;
@@ -153,7 +153,7 @@ public abstract class BaseExecutor implements Executor {
       if (list != null) {
         handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
       } else {
-        list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);
+        list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);/* 执行查询 */
       }
     } finally {
       queryStack--;
@@ -321,20 +321,21 @@ public abstract class BaseExecutor implements Executor {
     List<E> list;
     localCache.putObject(key, EXECUTION_PLACEHOLDER);
     try {
+      /* 子类 SimpleExecutor.doQuery */
       list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
     } finally {
       localCache.removeObject(key);
     }
-    localCache.putObject(key, list);
+    localCache.putObject(key, list);/* session级别缓存 */
     if (ms.getStatementType() == StatementType.CALLABLE) {
       localOutputParameterCache.putObject(key, parameter);
     }
     return list;
   }
-
+  /* 获取数据库连接 */
   protected Connection getConnection(Log statementLog) throws SQLException {
     Connection connection = transaction.getConnection();
-    if (statementLog.isDebugEnabled()) {
+    if (statementLog.isDebugEnabled()) { /* Connection日志代理包装 */
       return ConnectionLogger.newInstance(connection, statementLog, queryStack);
     } else {
       return connection;

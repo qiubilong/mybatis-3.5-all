@@ -35,20 +35,21 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
  * @author Clinton Begin
+ * 默认创建子类 - PreparedStatementHandler - 预编译语句处理器
  */
 public abstract class BaseStatementHandler implements StatementHandler {
 
-  protected final Configuration configuration;
+  protected final Configuration configuration;      /* 全局配置 */
   protected final ObjectFactory objectFactory;
   protected final TypeHandlerRegistry typeHandlerRegistry;
-  protected final ResultSetHandler resultSetHandler;
-  protected final ParameterHandler parameterHandler;
+  protected final ResultSetHandler resultSetHandler;/* 结果处理器 - DefaultResultSetHandler */
+  protected final ParameterHandler parameterHandler;/* 参数处理器 - DefaultParameterHandler  */
 
-  protected final Executor executor;
-  protected final MappedStatement mappedStatement;
+  protected final Executor executor;               /* 执行器，开启mapper缓存时是CachingExecutor，关闭时是SimpleExecutor */
+  protected final MappedStatement mappedStatement; /* sql映射语句 */
   protected final RowBounds rowBounds;
 
-  protected BoundSql boundSql;
+  protected BoundSql boundSql;                     /* 绑定的sql = sql + 参数   */
 
   protected BaseStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
     this.configuration = mappedStatement.getConfiguration();
@@ -59,7 +60,7 @@ public abstract class BaseStatementHandler implements StatementHandler {
     this.typeHandlerRegistry = configuration.getTypeHandlerRegistry();
     this.objectFactory = configuration.getObjectFactory();
 
-    if (boundSql == null) { // issue #435, get the key before calculating the statement
+    if (boundSql == null) { // （忽略）issue #435, get the key before calculating the statement
       generateKeys(parameterObject);
       boundSql = mappedStatement.getBoundSql(parameterObject);
     }
@@ -80,12 +81,12 @@ public abstract class BaseStatementHandler implements StatementHandler {
     return parameterHandler;
   }
 
-  @Override
+  @Override /* 执行预处理 */
   public Statement prepare(Connection connection, Integer transactionTimeout) throws SQLException {
     ErrorContext.instance().sql(boundSql.getSql());
     Statement statement = null;
     try {
-      statement = instantiateStatement(connection);
+      statement = instantiateStatement(connection);//PreparedStatementHandler
       setStatementTimeout(statement, transactionTimeout);
       setFetchSize(statement);
       return statement;

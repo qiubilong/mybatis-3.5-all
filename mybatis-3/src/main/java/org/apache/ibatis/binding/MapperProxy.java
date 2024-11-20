@@ -31,15 +31,15 @@ import org.apache.ibatis.session.SqlSession;
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
-public class MapperProxy<T> implements InvocationHandler, Serializable {
+public class MapperProxy<T> implements InvocationHandler, Serializable {  /* Mapper接口代理 */
 
   private static final long serialVersionUID = -6424540398559729838L;
   private static final int ALLOWED_MODES = MethodHandles.Lookup.PRIVATE | MethodHandles.Lookup.PROTECTED
       | MethodHandles.Lookup.PACKAGE | MethodHandles.Lookup.PUBLIC;
   private static final Constructor<Lookup> lookupConstructor;
   private static final Method privateLookupInMethod;
-  private final SqlSession sqlSession;
-  private final Class<T> mapperInterface;
+  private final SqlSession sqlSession;     /* DefaultSqlSession  */
+  private final Class<T> mapperInterface;  /* 被代理接口 */
   private final Map<Method, MapperMethod> methodCache;
 
   public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
@@ -73,7 +73,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     }
     lookupConstructor = lookup;
   }
-
+  /* 被代理对象方法执行总入口  */
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
@@ -89,8 +89,9 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     } catch (Throwable t) {
       throw ExceptionUtil.unwrapThrowable(t);
     }
-    final MapperMethod mapperMethod = cachedMapperMethod(method); /* 创建并缓存MapperMethod */
-    return mapperMethod.execute(sqlSession, args); /* 执行mapper的方法 */
+    final MapperMethod mapperMethod = cachedMapperMethod(method); /* 创建并缓存method包装对象 - MapperMethod */
+    /* 执行对应的 MapperMethod */
+    return mapperMethod.execute(sqlSession, args);
   }
 
   private MapperMethod cachedMapperMethod(Method method) {

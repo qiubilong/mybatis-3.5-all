@@ -39,7 +39,7 @@ public class DynamicContext {
   }
 
   private final ContextMap bindings;
-  private final StringJoiner sqlBuilder = new StringJoiner(" ");
+  private final StringJoiner sqlBuilder = new StringJoiner(" "); /* 动态sql */
   private int uniqueNumber = 0;
 
   public DynamicContext(Configuration configuration, Object parameterObject) {
@@ -50,7 +50,7 @@ public class DynamicContext {
     } else {
       bindings = new ContextMap(null, false);
     }
-    bindings.put(PARAMETER_OBJECT_KEY, parameterObject);
+    bindings.put(PARAMETER_OBJECT_KEY, parameterObject);/* 参数值 */
     bindings.put(DATABASE_ID_KEY, configuration.getDatabaseId());
   }
 

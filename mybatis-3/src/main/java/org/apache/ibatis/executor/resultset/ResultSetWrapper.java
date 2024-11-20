@@ -40,7 +40,7 @@ import org.apache.ibatis.type.UnknownTypeHandler;
  */
 public class ResultSetWrapper {
 
-  private final ResultSet resultSet;
+  private final ResultSet resultSet; /* JDBC原生结果集 */
   private final TypeHandlerRegistry typeHandlerRegistry;
   private final List<String> columnNames = new ArrayList<>();
   private final List<String> classNames = new ArrayList<>();

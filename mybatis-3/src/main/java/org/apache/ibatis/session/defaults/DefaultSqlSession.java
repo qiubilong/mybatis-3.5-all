@@ -48,7 +48,7 @@ import org.apache.ibatis.session.SqlSession;
 public class DefaultSqlSession implements SqlSession {
 
   private final Configuration configuration;
-  private final Executor executor;
+  private final Executor executor; // 默认 CachingExecutor --> SimpleExecutor --> BaseExecutor
 
   private final boolean autoCommit;
   private boolean dirty;
@@ -70,7 +70,7 @@ public class DefaultSqlSession implements SqlSession {
     return this.selectOne(statement, null);
   }
 
-  @Override
+  @Override /* 查询一个结果, parameter要么是单个参数，要么是一个map */
   public <T> T selectOne(String statement, Object parameter) {
     // Popular vote was to return null on 0 results and throw exception on too many.
     List<T> list = this.selectList(statement, parameter);
@@ -137,13 +137,13 @@ public class DefaultSqlSession implements SqlSession {
 
   @Override
   public <E> List<E> selectList(String statement, Object parameter) {
-    return this.selectList(statement, parameter, RowBounds.DEFAULT);
+    return this.selectList(statement, parameter, RowBounds.DEFAULT);//默认分页limit=Integer.MAX_VALUE，不建议使用
   }
 
-  @Override
+  @Override  /* 查询入口，parameter=单个对象 或 map */
   public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
     try {
-      MappedStatement ms = configuration.getMappedStatement(statement);
+      MappedStatement ms = configuration.getMappedStatement(statement);/* 映射语句 */
       return executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);

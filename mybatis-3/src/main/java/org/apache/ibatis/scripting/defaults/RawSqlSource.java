@@ -32,7 +32,7 @@ import org.apache.ibatis.session.Configuration;
  * @since 3.2.0
  * @author Eduardo Macarron
  */
-public class RawSqlSource implements SqlSource {
+public class RawSqlSource implements SqlSource { /* 固定sql */
 
   private final SqlSource sqlSource;
 
@@ -43,7 +43,7 @@ public class RawSqlSource implements SqlSource {
   public RawSqlSource(Configuration configuration, String sql, Class<?> parameterType) {
     SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
     Class<?> clazz = parameterType == null ? Object.class : parameterType;
-    sqlSource = sqlSourceParser.parse(sql, clazz, new HashMap<>());
+    sqlSource = sqlSourceParser.parse(sql, clazz, new HashMap<>());//StaticSqlSource
   }
 
   private static String getSql(Configuration configuration, SqlNode rootSqlNode) {

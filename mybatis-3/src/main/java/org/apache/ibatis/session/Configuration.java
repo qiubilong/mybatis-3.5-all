@@ -110,7 +110,7 @@ public class Configuration {
   protected boolean multipleResultSetsEnabled = true;
   protected boolean useGeneratedKeys; /* 支持pstmt.getGeneratedKeys()读取返回insert自增主键（insert时数据库都会返回） */
   protected boolean useColumnLabel = true;
-  protected boolean cacheEnabled = true;
+  protected boolean cacheEnabled = true; /* 开启mapper级别缓存，CachingExecutor */
   protected boolean callSettersOnNulls;
   protected boolean useActualParamName = true;
   protected boolean returnInstanceForEmptyRow;
@@ -145,7 +145,7 @@ public class Configuration {
    */
   protected Class<?> configurationFactory;
 
-  /* Mapper Interface - 注册器 --> 用于生成Mapper接口代理  */
+  /* Mapper接口 - 注册器 --> 用于生成Mapper接口代理  */
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
 
   /* 插件拦截器  */
@@ -588,23 +588,23 @@ public class Configuration {
   public MetaObject newMetaObject(Object object) {
     return MetaObject.forObject(object, objectFactory, objectWrapperFactory, reflectorFactory);
   }
-
+  /* 创建 - 参数处理器 - DefaultParameterHandler */
   public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
     ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
-    parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
+    parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);//插件代理
     return parameterHandler;
   }
-
+  /* 创建 - 结果处理器 - DefaultResultSetHandler */
   public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
       ResultHandler resultHandler, BoundSql boundSql) {
     ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
-    resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+    resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);//插件代理
     return resultSetHandler;
   }
-
+  /* 创建 - 语句处理器 - PreparedStatementHandler = （参数处理）DefaultParameterHandler + （结果处理）DefaultResultSetHandler */
   public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
     StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
-    statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
+    statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);//插件代理
     return statementHandler;
   }
 
@@ -621,11 +621,12 @@ public class Configuration {
     } else if (ExecutorType.REUSE == executorType) {
       executor = new ReuseExecutor(this, transaction);
     } else {
-      executor = new SimpleExecutor(this, transaction);
+      executor = new SimpleExecutor(this, transaction); /* 默认创建 SimpleExecutor */
     }
-    if (cacheEnabled) {
+    if (cacheEnabled) { /* 默认开启缓存*/
       executor = new CachingExecutor(executor);
     }
+    /* 拓展点 - 生成插件代理 */
     executor = (Executor) interceptorChain.pluginAll(executor);
     return executor;
   }

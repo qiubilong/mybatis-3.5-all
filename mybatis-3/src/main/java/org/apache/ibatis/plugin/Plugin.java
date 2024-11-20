@@ -28,7 +28,7 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 /**
  * @author Clinton Begin
  */
-public class Plugin implements InvocationHandler {
+public class Plugin implements InvocationHandler { /* 插件方法拦截器 */
 
   private final Object target;
   private final Interceptor interceptor;
@@ -45,7 +45,7 @@ public class Plugin implements InvocationHandler {
     Class<?> type = target.getClass();
     Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
     if (interfaces.length > 0) {
-      return Proxy.newProxyInstance(
+      return Proxy.newProxyInstance(  /* 生成插件代理 */
           type.getClassLoader(),
           interfaces,
           new Plugin(target, interceptor, signatureMap));
@@ -53,7 +53,7 @@ public class Plugin implements InvocationHandler {
     return target;
   }
 
-  @Override
+  @Override /* 方法拦击总入口 */
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
       Set<Method> methods = signatureMap.get(method.getDeclaringClass());

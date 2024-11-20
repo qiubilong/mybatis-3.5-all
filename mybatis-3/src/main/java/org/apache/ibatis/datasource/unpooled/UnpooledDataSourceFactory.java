@@ -50,7 +50,7 @@ public class UnpooledDataSourceFactory implements DataSourceFactory {
       } else if (metaDataSource.hasSetter(propertyName)) {
         String value = (String) properties.get(propertyName);
         Object convertedValue = convertValue(metaDataSource, propertyName, value);
-        metaDataSource.setValue(propertyName, convertedValue);
+        metaDataSource.setValue(propertyName, convertedValue);/* 反射调用setXXX */
       } else {
         throw new DataSourceException("Unknown DataSource property: " + propertyName);
       }

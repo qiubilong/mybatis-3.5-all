@@ -38,7 +38,7 @@ import org.apache.ibatis.transaction.Transaction;
  */
 public class CachingExecutor implements Executor {
 
-  private final Executor delegate;
+  private final Executor delegate; /* SimpleExecutor */
   private final TransactionalCacheManager tcm = new TransactionalCacheManager();
 
   public CachingExecutor(Executor delegate) {
@@ -76,8 +76,9 @@ public class CachingExecutor implements Executor {
     return delegate.update(ms, parameterObject);
   }
 
-  @Override
+  @Override /* 查询入口 */
   public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
+    /* sql绑定对象 = sql + 参数  */
     BoundSql boundSql = ms.getBoundSql(parameterObject);
     CacheKey key = createCacheKey(ms, parameterObject, rowBounds, boundSql);
     return query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
@@ -89,11 +90,11 @@ public class CachingExecutor implements Executor {
     return delegate.queryCursor(ms, parameter, rowBounds);
   }
 
-  @Override
+  @Override /* 查询总入口 */
   public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
       throws SQLException {
     Cache cache = ms.getCache();
-    if (cache != null) {
+    if (cache != null) {/* 开启mapper缓存 */
       flushCacheIfRequired(ms);
       if (ms.isUseCache() && resultHandler == null) {
         ensureNoOutParams(ms, boundSql);
@@ -106,6 +107,7 @@ public class CachingExecutor implements Executor {
         return list;
       }
     }
+    /* SimpleExecutor.BaseExecutor.query() */
     return delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
   }
 

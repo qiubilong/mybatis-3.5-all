@@ -23,10 +23,10 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  */
-public class DynamicSqlSource implements SqlSource {
+public class DynamicSqlSource implements SqlSource { /* 动态sql */
 
   private final Configuration configuration;
-  private final SqlNode rootSqlNode;
+  private final SqlNode rootSqlNode; /*  sql节点列表 - MixedSqlNode */
 
   public DynamicSqlSource(Configuration configuration, SqlNode rootSqlNode) {
     this.configuration = configuration;
@@ -36,9 +36,10 @@ public class DynamicSqlSource implements SqlSource {
   @Override
   public BoundSql getBoundSql(Object parameterObject) {
     DynamicContext context = new DynamicContext(configuration, parameterObject);
-    rootSqlNode.apply(context);
+    rootSqlNode.apply(context);/* 生成完整sql，这一步后相当于StaticSqlSource得到的sql语句 */
     SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
-    Class<?> parameterType = parameterObject == null ? Object.class : parameterObject.getClass();
+    Class<?> parameterType = parameterObject == null ? Object.class : parameterObject.getClass();//参数类型
+    /* 解析成 StaticSqlSource */
     SqlSource sqlSource = sqlSourceParser.parse(context.getSql(), parameterType, context.getBindings());
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
     context.getBindings().forEach(boundSql::setAdditionalParameter);

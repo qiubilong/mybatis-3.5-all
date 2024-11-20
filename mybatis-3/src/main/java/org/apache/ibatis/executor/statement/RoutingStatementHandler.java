@@ -54,7 +54,7 @@ public class RoutingStatementHandler implements StatementHandler {
 
   }
 
-  @Override
+  @Override /* 预处理sql- PreparedStatementHandler */
   public Statement prepare(Connection connection, Integer transactionTimeout) throws SQLException {
     return delegate.prepare(connection, transactionTimeout);
   }
@@ -74,7 +74,7 @@ public class RoutingStatementHandler implements StatementHandler {
     return delegate.update(statement);
   }
 
-  @Override
+  @Override /*  查询数据库- PreparedStatementHandler */
   public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
     return delegate.query(statement, resultHandler);
   }

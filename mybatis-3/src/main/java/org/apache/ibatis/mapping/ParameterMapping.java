@@ -29,12 +29,12 @@ public class ParameterMapping {
 
   private Configuration configuration;
 
-  private String property;
+  private String property;                  /* 参数名 */
   private ParameterMode mode;
-  private Class<?> javaType = Object.class;
+  private Class<?> javaType = Object.class; /* 参数类型 */
   private JdbcType jdbcType;
   private Integer numericScale;
-  private TypeHandler<?> typeHandler;
+  private TypeHandler<?> typeHandler;       /* 类型处理器 */
   private String resultMapId;
   private String jdbcTypeName;
   private String expression;

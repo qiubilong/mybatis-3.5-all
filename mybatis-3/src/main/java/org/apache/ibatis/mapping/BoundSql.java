@@ -33,13 +33,13 @@ import org.apache.ibatis.session.Configuration;
  *
  * @author Clinton Begin
  */
-public class BoundSql {
+public class BoundSql {  /* sql绑定 */
 
-  private final String sql;
-  private final List<ParameterMapping> parameterMappings;
-  private final Object parameterObject;
+  private final String sql;   /* 参数替换成?的完整sql */
+  private final List<ParameterMapping> parameterMappings; /* 参数列表 */
+  private final Object parameterObject;                   /* 参数值 */
   private final Map<String, Object> additionalParameters;
-  private final MetaObject metaParameters;
+  private final MetaObject metaParameters; /* HashMap参数值，_parameter <-->参数值  */
 
   public BoundSql(Configuration configuration, String sql, List<ParameterMapping> parameterMappings, Object parameterObject) {
     this.sql = sql;

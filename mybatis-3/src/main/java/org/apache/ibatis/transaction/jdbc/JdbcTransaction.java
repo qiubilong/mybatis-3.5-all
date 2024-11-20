@@ -135,7 +135,7 @@ public class JdbcTransaction implements Transaction {
     if (log.isDebugEnabled()) {
       log.debug("Opening JDBC Connection");
     }
-    connection = dataSource.getConnection();
+    connection = dataSource.getConnection();/* 从数据源获取连接 */
     if (level != null) {
       connection.setTransactionIsolation(level.getLevel());
     }

@@ -41,19 +41,20 @@ public final class ConnectionLogger extends BaseJdbcLogger implements Invocation
     this.connection = conn;
   }
 
-  @Override
+  @Override /* Connection日志代理包装 */
   public Object invoke(Object proxy, Method method, Object[] params)
       throws Throwable {
     try {
       if (Object.class.equals(method.getDeclaringClass())) {
-        return method.invoke(this, params);
+        return method.invoke(this, params);//Object类方法
       }
       if ("prepareStatement".equals(method.getName())) {
         if (isDebugEnabled()) {
           debug(" Preparing: " + removeBreakingWhitespace((String) params[0]), true);
         }
+        /* jdbc预处理 - JDBC4Connection */
         PreparedStatement stmt = (PreparedStatement) method.invoke(connection, params);
-        stmt = PreparedStatementLogger.newInstance(stmt, statementLog, queryStack);
+        stmt = PreparedStatementLogger.newInstance(stmt, statementLog, queryStack);/* PreparedStatement日志代理包装 */
         return stmt;
       } else if ("prepareCall".equals(method.getName())) {
         if (isDebugEnabled()) {

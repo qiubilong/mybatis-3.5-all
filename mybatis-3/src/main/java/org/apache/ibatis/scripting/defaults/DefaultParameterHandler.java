@@ -41,8 +41,8 @@ public class DefaultParameterHandler implements ParameterHandler {
   private final TypeHandlerRegistry typeHandlerRegistry;
 
   private final MappedStatement mappedStatement;
-  private final Object parameterObject;
-  private final BoundSql boundSql;
+  private final Object parameterObject;  /* 参数值 */
+  private final BoundSql boundSql;       /* 绑定参数的sql */
   private final Configuration configuration;
 
   public DefaultParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
@@ -58,16 +58,16 @@ public class DefaultParameterHandler implements ParameterHandler {
     return parameterObject;
   }
 
-  @Override
+  @Override /* sql参数设置 */
   public void setParameters(PreparedStatement ps) {
     ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     if (parameterMappings != null) {
-      for (int i = 0; i < parameterMappings.size(); i++) {
+      for (int i = 0; i < parameterMappings.size(); i++) {       /* 遍历参数列表 */
         ParameterMapping parameterMapping = parameterMappings.get(i);
         if (parameterMapping.getMode() != ParameterMode.OUT) {
           Object value;
-          String propertyName = parameterMapping.getProperty();
+          String propertyName = parameterMapping.getProperty();  /* 参数名 */
           if (boundSql.hasAdditionalParameter(propertyName)) { // issue #448 ask first for additional params
             value = boundSql.getAdditionalParameter(propertyName);
           } else if (parameterObject == null) {
@@ -84,7 +84,7 @@ public class DefaultParameterHandler implements ParameterHandler {
             jdbcType = configuration.getJdbcTypeForNull();
           }
           try {
-            typeHandler.setParameter(ps, i + 1, value, jdbcType);
+            typeHandler.setParameter(ps, i + 1, value, jdbcType); /* 类型处理器 -- 设置参数 */
           } catch (TypeException | SQLException e) {
             throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
           }
