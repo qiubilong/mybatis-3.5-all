@@ -94,16 +94,17 @@ public final class SqlSessionUtils {
     notNull(sessionFactory, NO_SQL_SESSION_FACTORY_SPECIFIED);
     notNull(executorType, NO_EXECUTOR_TYPE_SPECIFIED);
 
+    /* 获取当前线程绑定的sqlSession */
     SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
-
     SqlSession session = sessionHolder(executorType, holder);
     if (session != null) {
       return session;
     }
 
     LOGGER.debug(() -> "Creating a new SqlSession");
+    /* 当前线程绑定不存在sqlSession， 新创建一个sqlSession */
     session = sessionFactory.openSession(executorType);
-
+    /* 如果当前线程存在事务，则绑定SqlSession当前线程 */
     registerSessionHolder(sessionFactory, executorType, exceptionTranslator, session);
 
     return session;
@@ -125,19 +126,20 @@ public final class SqlSessionUtils {
    * @param session
    *          sqlSession used for registration.
    */
+  /* 如果当前线程存在事务，则绑定SqlSession当前线程 */
   private static void registerSessionHolder(SqlSessionFactory sessionFactory, ExecutorType executorType,
       PersistenceExceptionTranslator exceptionTranslator, SqlSession session) {
     SqlSessionHolder holder;
-    if (TransactionSynchronizationManager.isSynchronizationActive()) {
+    if (TransactionSynchronizationManager.isSynchronizationActive()) { /* 存在事务，也就是声明了注解@Transactional */
       Environment environment = sessionFactory.getConfiguration().getEnvironment();
 
       if (environment.getTransactionFactory() instanceof SpringManagedTransactionFactory) {
         LOGGER.debug(() -> "Registering transaction synchronization for SqlSession [" + session + "]");
 
         holder = new SqlSessionHolder(session, executorType, exceptionTranslator);
+        /* 绑定到当前线程ThreadLocal */
         TransactionSynchronizationManager.bindResource(sessionFactory, holder);
-        TransactionSynchronizationManager
-            .registerSynchronization(new SqlSessionSynchronization(holder, sessionFactory));
+        TransactionSynchronizationManager.registerSynchronization(new SqlSessionSynchronization(holder, sessionFactory));
         holder.setSynchronizedWithTransaction(true);
         holder.requested();
       } else {

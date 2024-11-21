@@ -43,7 +43,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
   }
 
   @Override
-  public SqlSession openSession() { /* SqlSession线程不安全 */
+  public SqlSession openSession() { /* 创建DefaultSqlSession - 线程不安全 */
     return openSessionFromDataSource(configuration.getDefaultExecutorType(), null, false);
   }
 
@@ -53,7 +53,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
   }
 
   @Override
-  public SqlSession openSession(ExecutorType execType) {
+  public SqlSession openSession(ExecutorType execType) {/* 创建DefaultSqlSession - 线程不安全 */
     return openSessionFromDataSource(execType, null, false);
   }
 
