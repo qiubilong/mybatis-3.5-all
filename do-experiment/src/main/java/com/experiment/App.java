@@ -34,7 +34,7 @@ public class App {
             userParam.setUserName("value%");
             List<User> users =  userMapper.selectList(userParam);//相当于执行 session.selectList
 
-            // sql注解 - 多个简单参数
+            // sql注解 - 多个简单参数 -- ParamMap
             MomentCommentExtMapper commentExtMapper = session.getMapper(MomentCommentExtMapper.class);
             Boolean updateCommentReplyNum = commentExtMapper.updateCommentReplyNum(121L,3);
             System.out.println(commentExtMapper.getClass());
