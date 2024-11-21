@@ -22,7 +22,8 @@ public class App {
         Reader reader = Resources.getResourceAsReader(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 
-        SqlSession session = sqlSessionFactory.openSession(); /* DefaultSqlSessionFactory.openSession()  */
+        /* DefaultSqlSession = DefaultSqlSessionFactory.openSession(),线程不安全  */
+        SqlSession session = sqlSessionFactory.openSession();
         try {
             // xml - 简单参数
             User user =  session.selectOne("com.experiment.mapper.UserMapper.selectById", 2233);
@@ -35,8 +36,8 @@ public class App {
 
             // sql注解 - 多个简单参数
             MomentCommentExtMapper commentExtMapper = session.getMapper(MomentCommentExtMapper.class);
+            Boolean updateCommentReplyNum = commentExtMapper.updateCommentReplyNum(121L,3);
             System.out.println(commentExtMapper.getClass());
-            Integer updateCommentReplyNum = commentExtMapper.updateCommentReplyNum(121L,3);
 
             session.commit();
         } catch (Exception e) {

@@ -220,7 +220,7 @@ public final class TypeHandlerRegistry { /* 数据类型处理 - 注册器 */
   @SuppressWarnings("unchecked")
   private <T> TypeHandler<T> getTypeHandler(Type type, JdbcType jdbcType) {
     if (ParamMap.class.equals(type)) {
-      return null;
+      return null; /* 多个参数 */
     }
     Map<JdbcType, TypeHandler<?>> jdbcHandlerMap = getJdbcHandlerMap(type);
     TypeHandler<?> handler = null;

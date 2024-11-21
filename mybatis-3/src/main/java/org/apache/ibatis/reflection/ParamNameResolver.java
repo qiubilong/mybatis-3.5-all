@@ -117,7 +117,7 @@ public class ParamNameResolver {
       final Map<String, Object> param = new ParamMap<>();
       int i = 0;
       for (Map.Entry<Integer, String> entry : names.entrySet()) {
-        param.put(entry.getValue(), args[entry.getKey()]);
+        param.put(entry.getValue(), args[entry.getKey()]);/* 按照传参顺序取值 */
         // add generic param names (param1, param2, ...)
         final String genericParamName = GENERIC_NAME_PREFIX + String.valueOf(i + 1);//param编号
         // ensure not to overwrite parameter named with @Param

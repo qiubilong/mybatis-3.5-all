@@ -75,7 +75,7 @@ public class DefaultParameterHandler implements ParameterHandler {
           } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {/* 可以理解为简单参数类型 */
             value = parameterObject;
           } else {
-            /* javaBean对象或Map */
+            /* javaBean对象或ParamMap */
             MetaObject metaObject = configuration.newMetaObject(parameterObject);
             value = metaObject.getValue(propertyName);
           }

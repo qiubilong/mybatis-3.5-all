@@ -13,5 +13,5 @@ public interface MomentCommentExtMapper {
      * 变更-评论-回复数
      */
     @Update("update moment_comment set reply_num = reply_num + #{changeNum} where id = #{commentId}")
-    int updateCommentReplyNum(@Param("commentId") Long commentId, @Param("changeNum") Integer changeNum);
+    boolean updateCommentReplyNum(@Param("commentId") Long commentId, @Param("changeNum") Integer changeNum);
 }
