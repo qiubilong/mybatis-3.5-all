@@ -47,9 +47,15 @@ public abstract class SqlSessionDaoSupport extends DaoSupport {
    * @param sqlSessionFactory
    *          a factory of SqlSession
    */
+
+  /* BeanDefinition 指定了依赖注入方式 AutowireMode (Autowire.BY_TYPE 或者Autowire.BY_NAME) --> setXXX  --> 注入依赖
+   *  spring已经废弃这种注入方式，推荐使用@Autowired来注入依赖，开发者更加清晰地看到依赖关系，增加代码可读性和维护性
+   *
+   * 	//class注入 --> setXXX --> 参数类型 --> 注入依赖
+   * */
   public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
     if (this.sqlSessionTemplate == null || sqlSessionFactory != this.sqlSessionTemplate.getSqlSessionFactory()) {
-      this.sqlSessionTemplate = createSqlSessionTemplate(sqlSessionFactory);
+      this.sqlSessionTemplate = createSqlSessionTemplate(sqlSessionFactory);/* 创建sqlSession代理SqlSessionTemplate --> 实现线程安全  */
     }
   }
 

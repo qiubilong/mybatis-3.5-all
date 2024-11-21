@@ -14,6 +14,4 @@ public interface UserMapper {
     User selectById(Integer id);
 
     List<User> selectList(User userxx);
-
-    void updateForName(String id,String username);
 }
