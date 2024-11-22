@@ -90,7 +90,7 @@ public class SqlSessionFactoryBuilder {
     }
   }
 
-  public SqlSessionFactory build(Configuration config) {
+  public SqlSessionFactory build(Configuration config) { /* spring集成时调用 */
     return new DefaultSqlSessionFactory(config);
   }
 

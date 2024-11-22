@@ -41,7 +41,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * @author Hunter Presnall
  * @author Eduardo Macarron
  */
-public class SpringManagedTransaction implements Transaction {
+public class SpringManagedTransaction implements Transaction { /* Spring事务管理器 */
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SpringManagedTransaction.class);
 
@@ -77,7 +77,7 @@ public class SpringManagedTransaction implements Transaction {
    * false and will always call commit/rollback so we need to no-op that calls.
    */
   private void openConnection() throws SQLException {
-    this.connection = DataSourceUtils.getConnection(this.dataSource);
+    this.connection = DataSourceUtils.getConnection(this.dataSource); /* 保证同个事务使用同个Connection */
     this.autoCommit = this.connection.getAutoCommit();
     this.isConnectionTransactional = DataSourceUtils.isConnectionTransactional(this.connection, this.dataSource);
 

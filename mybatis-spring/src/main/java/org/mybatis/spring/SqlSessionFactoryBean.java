@@ -86,7 +86,7 @@ import org.springframework.util.ClassUtils;
  * @see #setConfigLocation
  * @see #setDataSource
  */
-public class SqlSessionFactoryBean
+public class SqlSessionFactoryBean /* spring集成mybatis组件，方便加载mybatis文件创建DefaultSqlSessionFactory，并配置数据源 */
     implements FactoryBean<SqlSessionFactory>, InitializingBean, ApplicationListener<ApplicationEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SqlSessionFactoryBean.class);
@@ -94,21 +94,21 @@ public class SqlSessionFactoryBean
   private static final ResourcePatternResolver RESOURCE_PATTERN_RESOLVER = new PathMatchingResourcePatternResolver();
   private static final MetadataReaderFactory METADATA_READER_FACTORY = new CachingMetadataReaderFactory();
 
-  private Resource configLocation;
+  private Resource configLocation;                  /* mybatis配置xml文件 */
 
-  private Configuration configuration;
+  private Configuration configuration;              /* mybatis - 全局配置 */
 
   private Resource[] mapperLocations;
 
-  private DataSource dataSource;
+  private DataSource dataSource;                    /* 数据源 */
 
-  private TransactionFactory transactionFactory;
+  private TransactionFactory transactionFactory;    /* 默认事务工厂 SpringManagedTransactionFactory --> SpringManagedTransaction --> /* 保证同个事务使用同个Connection */
 
   private Properties configurationProperties;
 
   private SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
 
-  private SqlSessionFactory sqlSessionFactory;
+  private SqlSessionFactory sqlSessionFactory;      /* 最终创建 mybatis - DefaultSqlSessionFactory  */
 
   // EnvironmentAware requires spring 3.1
   private String environment = SqlSessionFactoryBean.class.getSimpleName();
@@ -627,6 +627,7 @@ public class SqlSessionFactoryBean
   /**
    * {@inheritDoc}
    */
+  /* 实例化该FactoryBean时，会调用FactoryBean.getObject()返回真正的Bean  */
   @Override
   public SqlSessionFactory getObject() throws Exception {
     if (this.sqlSessionFactory == null) {
