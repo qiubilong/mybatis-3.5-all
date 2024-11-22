@@ -112,7 +112,7 @@ public class ParamNameResolver {
     if (args == null || paramCount == 0) {
       return null;
     } else if (!hasParamAnnotation && paramCount == 1) {
-      return args[names.firstKey()];/* 单个对象 */
+      return args[names.firstKey()];/* 单个无注解@Param参数 */
     } else {
       final Map<String, Object> param = new ParamMap<>();
       int i = 0;

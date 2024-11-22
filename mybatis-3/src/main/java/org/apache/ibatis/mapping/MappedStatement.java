@@ -291,9 +291,15 @@ public final class MappedStatement { /* sql映射语句 */
   public String[] getResulSets() {
     return resultSets;
   }
-  /* DynamicSqlSource/RawSqlSource --> StaticSqlSource --> BoundSql  */
+
+  /*
+   *  根据参数返回sql
+   *
+   *  DynamicSqlSource/RawSqlSource --> StaticSqlSource --> BoundSql
+   */
   public BoundSql getBoundSql(Object parameterObject) {
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
+
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     if (parameterMappings == null || parameterMappings.isEmpty()) {
       boundSql = new BoundSql(configuration, boundSql.getSql(), parameterMap.getParameterMappings(), parameterObject);

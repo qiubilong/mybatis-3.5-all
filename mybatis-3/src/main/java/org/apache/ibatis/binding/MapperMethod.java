@@ -64,7 +64,7 @@ public class MapperMethod {
         break;
       }
       case UPDATE: {
-        Object param = method.convertArgsToSqlCommandParam(args); /* 单个参数返回参数本身，多个参数返回map */
+        Object param = method.convertArgsToSqlCommandParam(args); /* 单个参数返回参数本身，多个参数返回ParamMap */
         result = rowCountResult(sqlSession.update(command.getName(), param));
         break;
       }
@@ -84,7 +84,7 @@ public class MapperMethod {
         } else if (method.returnsCursor()) {
           result = executeForCursor(sqlSession, args);
         } else {
-          Object param = method.convertArgsToSqlCommandParam(args);/* 单个参数返回参数本身，多个参数返回map */
+          Object param = method.convertArgsToSqlCommandParam(args);/* 单个参数返回参数本身，多个参数返回ParamMap */
           result = sqlSession.selectOne(command.getName(), param); /* 查询单个对象 */
           if (method.returnsOptional()
               && (result == null || !method.getReturnType().equals(result.getClass()))) {

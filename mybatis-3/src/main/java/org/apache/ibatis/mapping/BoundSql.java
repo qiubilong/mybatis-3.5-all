@@ -38,7 +38,7 @@ public class BoundSql {  /* sql绑定 */
   private final String sql;   /* 参数替换成?的完整sql */
   private final List<ParameterMapping> parameterMappings; /* sql参数列表 */
   private final Object parameterObject;                   /* 参数值 */
-  private final Map<String, Object> additionalParameters;
+  private final Map<String, Object> additionalParameters; /* 集合参数展开结果，例如__frch_item_0 ->对象0 ,__frch_item_1 ->对象1等等 */
   private final MetaObject metaParameters; /* HashMap参数值，_parameter <-->参数值  */
 
   public BoundSql(Configuration configuration, String sql, List<ParameterMapping> parameterMappings, Object parameterObject) {

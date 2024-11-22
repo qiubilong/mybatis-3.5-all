@@ -39,15 +39,16 @@ public class DynamicContext {
   }
 
   private final ContextMap bindings;
-  private final StringJoiner sqlBuilder = new StringJoiner(" "); /* 动态sql */
+  private final StringJoiner sqlBuilder = new StringJoiner(" "); /* 动态sql拼接 */
   private int uniqueNumber = 0;
 
   public DynamicContext(Configuration configuration, Object parameterObject) {
-    if (parameterObject != null && !(parameterObject instanceof Map)) {
+    if (parameterObject != null && !(parameterObject instanceof Map)) {/* 单个非参数对象 */
       MetaObject metaObject = configuration.newMetaObject(parameterObject);
       boolean existsTypeHandler = configuration.getTypeHandlerRegistry().hasTypeHandler(parameterObject.getClass());
       bindings = new ContextMap(metaObject, existsTypeHandler);
     } else {
+      /* Map参数 */
       bindings = new ContextMap(null, false);
     }
     bindings.put(PARAMETER_OBJECT_KEY, parameterObject);/* 参数值 */

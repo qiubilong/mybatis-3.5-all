@@ -41,7 +41,7 @@ public class DefaultParameterHandler implements ParameterHandler {
   private final TypeHandlerRegistry typeHandlerRegistry;
 
   private final MappedStatement mappedStatement;
-  private final Object parameterObject;  /* 参数值 */
+  private final Object parameterObject;  /* 参数值，要么单个无注解@Param对象、要么ParamMap */
   private final BoundSql boundSql;       /* 绑定参数的sql */
   private final Configuration configuration;
 
@@ -68,14 +68,16 @@ public class DefaultParameterHandler implements ParameterHandler {
         if (parameterMapping.getMode() != ParameterMode.OUT) {
           Object value;
           String propertyName = parameterMapping.getProperty();  /* 参数名 */
+           /* 1、集合对象取值 */
           if (boundSql.hasAdditionalParameter(propertyName)) { // issue #448 ask first for additional params
             value = boundSql.getAdditionalParameter(propertyName);
           } else if (parameterObject == null) {
             value = null;
-          } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {/* 可以理解为简单参数类型 */
+            /* 2、可以理解为简单参数类型 */
+          } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
             value = parameterObject;
           } else {
-            /* javaBean对象或ParamMap */
+            /* 3、JavaBean对象或ParamMap */
             MetaObject metaObject = configuration.newMetaObject(parameterObject);
             value = metaObject.getValue(propertyName);
           }

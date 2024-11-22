@@ -110,12 +110,14 @@ public class MetaObject {
   }
 
   public Object getValue(String name) {
-    PropertyTokenizer prop = new PropertyTokenizer(name);
+    PropertyTokenizer prop = new PropertyTokenizer(name);/* .号分隔，解析字段名字 */
     if (prop.hasNext()) {
+      /* 取对象 */
       MetaObject metaValue = metaObjectForProperty(prop.getIndexedName());
       if (metaValue == SystemMetaObject.NULL_META_OBJECT) {
         return null;
       } else {
+        /* 取字段值 */
         return metaValue.getValue(prop.getChildren());
       }
     } else {

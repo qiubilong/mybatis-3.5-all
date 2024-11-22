@@ -33,13 +33,13 @@ public class DynamicSqlSource implements SqlSource { /* 动态sql */
     this.rootSqlNode = rootSqlNode;
   }
 
-  @Override
+  @Override /* parameterObject要么是单个参数，要么是ParamMap */
   public BoundSql getBoundSql(Object parameterObject) {
     DynamicContext context = new DynamicContext(configuration, parameterObject);
     rootSqlNode.apply(context);/* 生成完整sql，这一步后相当于StaticSqlSource得到的sql语句 */
     SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
     Class<?> parameterType = parameterObject == null ? Object.class : parameterObject.getClass();//参数类型
-    /* 解析成 StaticSqlSource */
+    /* 解析成 StaticSqlSource，占位符#{}替换成?，并记录参数名 */
     SqlSource sqlSource = sqlSourceParser.parse(context.getSql(), parameterType, context.getBindings());
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
     context.getBindings().forEach(boundSql::setAdditionalParameter);

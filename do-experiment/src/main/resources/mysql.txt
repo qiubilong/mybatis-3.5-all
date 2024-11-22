@@ -1,0 +1,23 @@
+
+
+CREATE TABLE `moment_comment_praise` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `comment_id` bigint DEFAULT NULL COMMENT '评论id',
+  `dynamic_id` bigint DEFAULT NULL COMMENT '动态id',
+  `user_id` bigint NOT NULL COMMENT '点赞人',
+  `praise_time` datetime DEFAULT NULL COMMENT '点赞时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `idx_dynamic_id_user_id` (`comment_id`,`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=436 DEFAULT CHARSET=utf8mb4  COMMENT='评论 - 点赞表';
+
+
+
+CREATE TABLE `moment_counter` (
+  `mid` bigint NOT NULL COMMENT '动态id',
+  `num_like` bigint DEFAULT '0' COMMENT '点赞数',
+  `num_comment` int DEFAULT '0' COMMENT '评论数',
+  `num_uv` bigint DEFAULT '0' COMMENT '浏览数',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`mid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='动态 - 统计表';

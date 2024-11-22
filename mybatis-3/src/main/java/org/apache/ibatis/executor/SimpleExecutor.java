@@ -40,12 +40,13 @@ public class SimpleExecutor extends BaseExecutor {
     super(configuration, transaction);
   }
 
-  @Override
+  @Override /* insert、update、delete 数据库操作核心入口 */
   public int doUpdate(MappedStatement ms, Object parameter) throws SQLException {
     Statement stmt = null;
     try {
       Configuration configuration = ms.getConfiguration();
       StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, RowBounds.DEFAULT, null, null);
+      /* 获取数据库Connection -- 执行预处理 -- 设置参数 */
       stmt = prepareStatement(handler, ms.getStatementLog());
       return handler.update(stmt);
     } finally {
@@ -95,9 +96,9 @@ public class SimpleExecutor extends BaseExecutor {
 
   private Statement prepareStatement(StatementHandler handler, Log statementLog) throws SQLException {
     Statement stmt;
-    /* 获取连接 */
+    /* 获取连接 Connection（开启日志时，返回ConnectionLogger） */
     Connection connection = getConnection(statementLog);
-    /* 执行底层jdbc预处理，返回PreparedStatement */
+    /* 执行底层jdbc预处理，返回PreparedStatement（开启日志时，返回PreparedStatementLogger） */
     stmt = handler.prepare(connection, transaction.getTimeout());
     /* PreparedStatementHandler 参数设置 */
     handler.parameterize(stmt);

@@ -58,7 +58,7 @@ public class ForEachSqlNode implements SqlNode {
     boolean first = true;
     applyOpen(context);
     int i = 0;
-    for (Object o : iterable) {
+    for (Object o : iterable) {/* 遍历参数列表,List转换Map，key=__frch_vo_xxx  */
       DynamicContext oldContext = context;
       if (first || separator == null) {
         context = new PrefixedContext(context, "");
@@ -99,7 +99,7 @@ public class ForEachSqlNode implements SqlNode {
   private void applyItem(DynamicContext context, Object o, int i) {
     if (item != null) {
       context.bind(item, o);
-      context.bind(itemizeItem(item, i), o);
+      context.bind(itemizeItem(item, i), o);/* __frch_ + item + "_" + i; */
     }
   }
 
