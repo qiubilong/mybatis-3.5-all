@@ -353,8 +353,15 @@
           <attach>true</attach>
         </configuration>
         <executions>
-          <execution>
+        <!--  <execution>
             <phase>compile</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>-->
+          <!-- 保留源码注释-->
+          <execution>
+            <id>attach-sources</id>
             <goals>
               <goal>jar</goal>
             </goals>
