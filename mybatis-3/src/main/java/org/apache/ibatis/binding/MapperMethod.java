@@ -54,6 +54,7 @@ public class MapperMethod {
     this.method = new MethodSignature(config, mapperInterface, method);
   }
 
+  /* 集成spring后，sqlSession = SqlSessionTemplate --> SqlSessionInterceptor方法拦截 --> 每个线程创建独立的DefaultSqlSession实现线程安全 */
   public Object execute(SqlSession sqlSession, Object[] args) {
     Object result;
     switch (command.getType()) {

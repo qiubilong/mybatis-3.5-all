@@ -16,7 +16,7 @@ public class MyBatisConfig {
 
 	 /* 创建 DefaultSqlSessionFactory --> mybatis全局配置 Configuration
 	 *
-	 *  实例化Mapper接口对应工厂Bean对象MapperFactoryBean -->注入SqlSessionFactory --> SqlSessionTemplate(ThreadLocal实现线程安全) --> 创建Mapper代理对象 -->
+	 *  实例化Mapper接口对应FactoryBean对象MapperFactoryBean -->注入SqlSessionFactory --> 实例化SqlSessionTemplate(ThreadLocal实现线程安全) --> 创建MapperProxyr代理对象 -->
 	 */
 
 	@Bean

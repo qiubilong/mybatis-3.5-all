@@ -94,7 +94,7 @@ public final class SqlSessionUtils {
     notNull(sessionFactory, NO_SQL_SESSION_FACTORY_SPECIFIED);
     notNull(executorType, NO_EXECUTOR_TYPE_SPECIFIED);
 
-    /* 获取当前线程绑定的sqlSession */
+    /* 获取当前线程绑定的 DefaultSqlSession */
     SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
     SqlSession session = sessionHolder(executorType, holder);
     if (session != null) {
@@ -102,7 +102,7 @@ public final class SqlSessionUtils {
     }
 
     LOGGER.debug(() -> "Creating a new SqlSession");
-    /* 当前线程绑定不存在sqlSession， 新创建一个sqlSession */
+    /* 当前线程绑定不存在 DefaultSqlSession， 新创建一个 DefaultSqlSession */
     session = sessionFactory.openSession(executorType);
     /* 如果当前线程存在事务，则绑定SqlSession当前线程 */
     registerSessionHolder(sessionFactory, executorType, exceptionTranslator, session);

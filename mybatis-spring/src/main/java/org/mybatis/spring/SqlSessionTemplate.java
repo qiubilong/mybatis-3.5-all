@@ -74,11 +74,11 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
  */
 public class SqlSessionTemplate implements SqlSession, DisposableBean {
 
-  private final SqlSessionFactory sqlSessionFactory;
+  private final SqlSessionFactory sqlSessionFactory;  /* DefaultSqlSessionFactory */
 
-  private final ExecutorType executorType;
+  private final ExecutorType executorType;            /* ExecutorType.SIMPLE */
 
-  private final SqlSession sqlSessionProxy;
+  private final SqlSession sqlSessionProxy;           /* 方法拦截器 SqlSessionInterceptor  */
 
   private final PersistenceExceptionTranslator exceptionTranslator;
 
@@ -422,10 +422,11 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
   private class SqlSessionInterceptor implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-      /* 返回当前线程绑定的SqlSession， 否则新建一个  */
+      /* 返回当前线程绑定的 DefaultSqlSession， 否则新建一个  */
       SqlSession sqlSession = getSqlSession(SqlSessionTemplate.this.sqlSessionFactory,
           SqlSessionTemplate.this.executorType, SqlSessionTemplate.this.exceptionTranslator);
       try {
+        /* 反射调用DefaultSqlSession的方法 */
         Object result = method.invoke(sqlSession, args);
         if (!isSqlSessionTransactional(sqlSession, SqlSessionTemplate.this.sqlSessionFactory)) {
           // force commit even on non-dirty sessions because some databases require

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserService {
 
-    @Autowired
+    @Autowired /* MapperProxy 对象，持有SqlSessionTemplate -->  SqlSessionInterceptor方法拦截 --> 每个线程创建独立的DefaultSqlSession实现线程安全 */
     private UserMapper userMapper;
 
     public User selectById(Integer id) {

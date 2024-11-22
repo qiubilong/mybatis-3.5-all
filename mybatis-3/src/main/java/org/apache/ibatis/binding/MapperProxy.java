@@ -38,8 +38,8 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {  /* Map
       | MethodHandles.Lookup.PACKAGE | MethodHandles.Lookup.PUBLIC;
   private static final Constructor<Lookup> lookupConstructor;
   private static final Method privateLookupInMethod;
-  private final SqlSession sqlSession;     /* DefaultSqlSession  */
-  private final Class<T> mapperInterface;  /* 被代理接口 */
+  private final SqlSession sqlSession;     /* SqlSessionTemplate  */
+  private final Class<T> mapperInterface;  /* 被代理Mapper接口 */
   private final Map<Method, MapperMethod> methodCache;
 
   public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
@@ -73,7 +73,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {  /* Map
     }
     lookupConstructor = lookup;
   }
-  /* 拦截被代理方法 - 总入口  */
+  /* 拦截被代理对象的方法 - 总入口  */
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
