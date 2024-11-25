@@ -76,7 +76,7 @@ import org.springframework.context.annotation.Import;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import(MapperScannerRegistrar.class)
+@Import(MapperScannerRegistrar.class) /* 导入Mapper扫描配置 */
 @Repeatable(MapperScans.class)
 public @interface MapperScan {
 
@@ -158,7 +158,7 @@ public @interface MapperScan {
    *
    * @return the class of {@code MapperFactoryBean}
    */
-  Class<? extends MapperFactoryBean> factoryBean() default MapperFactoryBean.class;
+  Class<? extends MapperFactoryBean> factoryBean() default MapperFactoryBean.class; /* Mapper接口代理对象 - 生成工厂 */
 
   /**
    * Whether enable lazy initialization of mapper bean.

@@ -98,7 +98,7 @@ public class SqlSessionFactoryBean /* spring集成mybatis组件，方便加载my
 
   private Configuration configuration;              /* mybatis - 全局配置 */
 
-  private Resource[] mapperLocations;
+  private Resource[] mapperLocations;               /* Xml Mapper 文件  */
 
   private DataSource dataSource;                    /* 数据源 */
 
@@ -608,7 +608,7 @@ public class SqlSessionFactoryBean /* spring集成mybatis组件，方便加载my
           try {
             XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(mapperLocation.getInputStream(),
                 targetConfiguration, mapperLocation.toString(), targetConfiguration.getSqlFragments());
-            xmlMapperBuilder.parse();
+            xmlMapperBuilder.parse(); /* 解析Xml Mapper */
           } catch (Exception e) {
             throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
           } finally {

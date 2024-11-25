@@ -67,10 +67,10 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
   /**
    * {@inheritDoc}
    */
-  @Override
+  @Override  /* ImportBeanDefinitionRegistrar回调， importingClassMetadata=声明注解的配置类  */
   public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
     AnnotationAttributes mapperScanAttrs = AnnotationAttributes
-        .fromMap(importingClassMetadata.getAnnotationAttributes(MapperScan.class.getName()));
+        .fromMap(importingClassMetadata.getAnnotationAttributes(MapperScan.class.getName()));/* 读取注解@MapperScan配置 */
     if (mapperScanAttrs != null) {
       registerBeanDefinitions(importingClassMetadata, mapperScanAttrs, registry,
           generateBaseBeanName(importingClassMetadata, 0));
@@ -80,6 +80,7 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
   void registerBeanDefinitions(AnnotationMetadata annoMeta, AnnotationAttributes annoAttrs,
       BeanDefinitionRegistry registry, String beanName) {
 
+    /* 注册BeanDefinition - MapperScannerConfigurer */
     BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
     builder.addPropertyValue("processPropertyPlaceHolders", true);
 
@@ -136,7 +137,7 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
     if (!AbstractBeanDefinition.SCOPE_DEFAULT.equals(defaultScope)) {
       builder.addPropertyValue("defaultScope", defaultScope);
     }
-
+    /* 扫描包路径 */
     builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(basePackages));
 
     // for spring-native

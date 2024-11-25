@@ -51,9 +51,12 @@ import org.springframework.beans.factory.FactoryBean;
  *
  * @see SqlSessionTemplate
  */
+/* 创建 Mapper接口代理对象 工厂
+
+注入SqlSessionTemplate --> 保证线程安全  */
 public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements FactoryBean<T> {
 
-  private Class<T> mapperInterface;
+  private Class<T> mapperInterface; /* 被代理Mapper接口 */
 
   private boolean addToConfig = true;
 
@@ -92,7 +95,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
    */
   @Override
   public T getObject() throws Exception {
-    return getSqlSession().getMapper(this.mapperInterface);
+    return getSqlSession().getMapper(this.mapperInterface); /* SqlSessionTemplate.getConfiguration()创建Mapper接口代理 */
   }
 
   /**

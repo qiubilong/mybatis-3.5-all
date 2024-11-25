@@ -19,7 +19,7 @@ public class MyBatisConfig {
 
 	 /* 创建 DefaultSqlSessionFactory --> mybatis全局配置 Configuration
 	 *
-	 *  实例化Mapper接口对应FactoryBean对象MapperFactoryBean -->注入SqlSessionFactory --> 实例化SqlSessionTemplate(ThreadLocal实现线程安全) --> 创建MapperProxyr代理对象 -->
+	 *  实例化Mapper接口对应FactoryBean对象MapperFactoryBean -->注入SqlSessionFactory --> 实例化SqlSessionTemplate(ThreadLocal实现线程安全) --> 创建MapperProxy代理对象 -->
 	 */
 
 	/*@Bean
@@ -40,7 +40,7 @@ public class MyBatisConfig {
 
 	@Bean
 	public DataSource createDataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();/* 简单数据源，非动态数据源AbstractRoutingDataSource */
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();/* 简单数据源 */
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/experiment?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false");
 		dataSource.setUsername("root");

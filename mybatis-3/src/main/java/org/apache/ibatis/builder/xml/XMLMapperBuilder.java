@@ -114,7 +114,7 @@ public class XMLMapperBuilder extends BaseBuilder {
       builderAssistant.setCurrentNamespace(namespace);
       cacheRefElement(context.evalNode("cache-ref"));
       cacheElement(context.evalNode("cache"));      /* 解析 - mapper缓存*/
-      parameterMapElement(context.evalNodes("/mapper/parameterMap"));
+      parameterMapElement(context.evalNodes("/mapper/parameterMap"));//废弃
       resultMapElements(context.evalNodes("/mapper/resultMap")); /* 解析 - 结果映射（javaBean属性与数据表列名一致时可无需配置） */
       sqlElement(context.evalNodes("/mapper/sql")); /* 解析 - sql片段  */
       buildStatementFromContext(context.evalNodes("select|insert|update|delete")); /* 解析sql语句 */

@@ -72,6 +72,7 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
  * @see SqlSessionFactory
  * @see MyBatisExceptionTranslator
  */
+/* SqlSession对象代理 -- SqlSessionInterceptor --> ThreadLocal不存在DefaultSqlSession就新建 --> 实现线程安全    */
 public class SqlSessionTemplate implements SqlSession, DisposableBean {
 
   private final SqlSessionFactory sqlSessionFactory;  /* DefaultSqlSessionFactory */
@@ -88,7 +89,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
    * @param sqlSessionFactory
    *          a factory of SqlSession
    */
-  public SqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+  public SqlSessionTemplate(SqlSessionFactory sqlSessionFactory) { /* DefaultSqlSessionFactory */
     this(sqlSessionFactory, sqlSessionFactory.getConfiguration().getDefaultExecutorType());
   }
 
