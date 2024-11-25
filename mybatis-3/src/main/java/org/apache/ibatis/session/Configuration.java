@@ -788,7 +788,7 @@ public class Configuration {
   }
 
   public <T> void addMapper(Class<T> type) {
-    mapperRegistry.addMapper(type);
+    mapperRegistry.addMapper(type);/* 注册解析Mapper接口 */
   }
 
   public <T> T getMapper(Class<T> type, SqlSession sqlSession) {

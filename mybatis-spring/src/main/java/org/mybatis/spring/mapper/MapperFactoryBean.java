@@ -80,7 +80,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
     Configuration configuration = getSqlSession().getConfiguration();
     if (this.addToConfig && !configuration.hasMapper(this.mapperInterface)) {
       try {
-        configuration.addMapper(this.mapperInterface);
+        configuration.addMapper(this.mapperInterface);/* Mybatis注册解析Mapper接口 */
       } catch (Exception e) {
         logger.error("Error while adding the mapper '" + this.mapperInterface + "' to configuration.", e);
         throw new IllegalArgumentException(e);
@@ -95,7 +95,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
    */
   @Override
   public T getObject() throws Exception {
-    return getSqlSession().getMapper(this.mapperInterface); /* SqlSessionTemplate.getConfiguration()创建Mapper接口代理 */
+    return getSqlSession().getMapper(this.mapperInterface); /* SqlSessionTemplate.getConfiguration()创建Mapper接口代理 MapperProxy */
   }
 
   /**

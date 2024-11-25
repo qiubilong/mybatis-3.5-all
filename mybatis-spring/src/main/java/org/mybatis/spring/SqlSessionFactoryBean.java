@@ -86,7 +86,7 @@ import org.springframework.util.ClassUtils;
  * @see #setConfigLocation
  * @see #setDataSource
  */
-public class SqlSessionFactoryBean /* spring集成mybatis组件，方便加载mybatis文件创建DefaultSqlSessionFactory，并配置数据源 */
+public class SqlSessionFactoryBean /* spring集成mybatis组件，方便创建Mybatis - DefaultSqlSessionFactory，并配置数据源 */
     implements FactoryBean<SqlSessionFactory>, InitializingBean, ApplicationListener<ApplicationEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SqlSessionFactoryBean.class);

@@ -4,8 +4,6 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +12,7 @@ import java.io.IOException;
 
 @Component
 @Configuration
-@MapperScan("com.experiment.mapper")
+@MapperScan("com.experiment.mapper") /* 扫描Mapper接口-->注册Definition(name = xxxMapper,class =MapperFactoryBean) -->DefaultSqlSessionFactory.Configuration注册解析Mapper -->获取代理类MapperFactoryBean.getObject() -->Configuration.getMapper(xxx)  */
 public class MyBatisConfig {
 
 	 /* 创建 DefaultSqlSessionFactory --> mybatis全局配置 Configuration
@@ -33,7 +31,9 @@ public class MyBatisConfig {
 	@Bean
 	public SqlSessionFactoryBean createSqlSessionFactoryBean() throws IOException {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-		sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:com.experiment.mapper"));
+		org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+		configuration.setCacheEnabled(false);//关闭Mapper缓存--不需要CachingExecutor
+		sqlSessionFactoryBean.setConfiguration(configuration);
 		sqlSessionFactoryBean.setDataSource(createDataSource());/* 必须手动指定数据源 */
 		return sqlSessionFactoryBean;
 	}

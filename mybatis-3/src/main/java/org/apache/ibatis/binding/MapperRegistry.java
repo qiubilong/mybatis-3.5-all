@@ -34,7 +34,7 @@ import org.apache.ibatis.session.SqlSession;
 public class MapperRegistry {
 
   private final Configuration config;
-  private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>();
+  private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>(); /* Mapper接口对应的 MapperProxy工厂 */
 
   public MapperRegistry(Configuration config) {
     this.config = config;
@@ -69,7 +69,7 @@ public class MapperRegistry {
         // otherwise the binding may automatically be attempted by the
         // mapper parser. If the type is already known, it won't try.
         MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
-        parser.parse(); /* 解析 mapper接口 */
+        parser.parse(); /* 解析 Mapper接口 */
         loadCompleted = true;
       } finally {
         if (!loadCompleted) {

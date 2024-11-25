@@ -53,7 +53,7 @@ public abstract class SqlSessionDaoSupport extends DaoSupport {
    *
    * 	//class注入 --> setXXX --> 参数类型 --> 注入依赖
    * */
-  public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+  public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) { /* 注入DefaultSqlSessionFactory */
     if (this.sqlSessionTemplate == null || sqlSessionFactory != this.sqlSessionTemplate.getSqlSessionFactory()) {
       this.sqlSessionTemplate = createSqlSessionTemplate(sqlSessionFactory);/* 创建sqlSession代理SqlSessionTemplate --> 实现线程安全  */
     }
