@@ -27,7 +27,7 @@ public interface MomentCounterMapper  {
             "</script>"})
     int batchUpdateCounter(@Param("list") List<MomentCounter> list);
 
-    @Insert("insert into moment_counterz(mid, create_time) values ( #{mid}, #{createTime})")
+    @Insert("insert into moment_counter(mid, create_time) values ( #{mid}, #{createTime})")
     boolean insertCounter(MomentCounter paramVo);
 
 

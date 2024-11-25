@@ -15,19 +15,11 @@ import java.io.IOException;
 @MapperScan("com.experiment.mapper") /* 扫描Mapper接口-->注册Definition(name = xxxMapper,class =MapperFactoryBean) -->DefaultSqlSessionFactory.Configuration注册解析Mapper -->获取代理类MapperFactoryBean.getObject() -->Configuration.getMapper(xxx)  */
 public class MyBatisConfig {
 
-	 /* 创建 DefaultSqlSessionFactory --> mybatis全局配置 Configuration
-	 *
+	 /*
 	 *  实例化Mapper接口对应FactoryBean对象MapperFactoryBean -->注入SqlSessionFactory --> 实例化SqlSessionTemplate(ThreadLocal实现线程安全) --> 创建MapperProxy代理对象 -->
 	 */
 
-	/*@Bean
-	public SqlSessionFactory createSqlSessionFactory() throws IOException {
-		InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
-		SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-		return sessionFactory;
-	}
-*/
-	/* 使用spring配置mybatis，创建DefaultSqlSessionFactory */
+	/* 使用spring配置mybatis，创建DefaultSqlSessionFactory --> 创建mybatis全局配置 Configuration */
 	@Bean
 	public SqlSessionFactoryBean createSqlSessionFactoryBean() throws IOException {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
