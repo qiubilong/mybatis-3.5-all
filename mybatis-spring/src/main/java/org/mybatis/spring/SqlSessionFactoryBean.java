@@ -58,7 +58,6 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.NestedIOException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -576,7 +575,7 @@ public class SqlSessionFactoryBean /* spring集成mybatis组件，方便创建My
       try {
         targetConfiguration.setDatabaseId(this.databaseIdProvider.getDatabaseId(this.dataSource));
       } catch (SQLException e) {
-        throw new NestedIOException("Failed getting a databaseId", e);
+        throw new IOException("Failed getting a databaseId", e);
       }
     }
 
@@ -587,7 +586,7 @@ public class SqlSessionFactoryBean /* spring集成mybatis组件，方便创建My
         xmlConfigBuilder.parse();
         LOGGER.debug(() -> "Parsed configuration file: '" + this.configLocation + "'");
       } catch (Exception ex) {
-        throw new NestedIOException("Failed to parse config resource: " + this.configLocation, ex);
+        throw new IOException("Failed to parse config resource: " + this.configLocation, ex);//spring6.0移除 NestedIOException
       } finally {
         ErrorContext.instance().reset();
       }
@@ -610,7 +609,7 @@ public class SqlSessionFactoryBean /* spring集成mybatis组件，方便创建My
                 targetConfiguration, mapperLocation.toString(), targetConfiguration.getSqlFragments());
             xmlMapperBuilder.parse(); /* 解析Xml Mapper */
           } catch (Exception e) {
-            throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
+            throw new IOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
           } finally {
             ErrorContext.instance().reset();
           }
