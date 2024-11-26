@@ -41,7 +41,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * @author Hunter Presnall
  * @author Eduardo Macarron
  */
-public class SpringManagedTransaction implements Transaction { /* Spring事务管理器 */
+public class SpringManagedTransaction implements Transaction { /* Spring事务 */
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SpringManagedTransaction.class);
 

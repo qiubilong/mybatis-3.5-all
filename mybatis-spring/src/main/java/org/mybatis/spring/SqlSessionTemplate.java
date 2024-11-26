@@ -130,7 +130,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
     this.executorType = executorType;
     this.exceptionTranslator = exceptionTranslator;
     this.sqlSessionProxy = (SqlSession) newProxyInstance(SqlSessionFactory.class.getClassLoader(),
-        new Class[] { SqlSession.class }, new SqlSessionInterceptor());/* 创建代理SqlSessionTemplate -->  实现线程安全 */
+        new Class[] { SqlSession.class }, new SqlSessionInterceptor());/* 创建代理SqlSessionTemplate -->  实现事务和线程安全 */
   }
 
   public SqlSessionFactory getSqlSessionFactory() {
@@ -423,7 +423,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
   private class SqlSessionInterceptor implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-      /* 返回当前线程绑定的 DefaultSqlSession， 否则新建一个  */
+      /* 返回当前线程绑定的ThreadLocal的 DefaultSqlSession， 否则新建一个  */
       SqlSession sqlSession = getSqlSession(SqlSessionTemplate.this.sqlSessionFactory,
           SqlSessionTemplate.this.executorType, SqlSessionTemplate.this.exceptionTranslator);
       try {

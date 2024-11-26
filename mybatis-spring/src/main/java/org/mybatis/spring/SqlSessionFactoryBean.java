@@ -591,7 +591,7 @@ public class SqlSessionFactoryBean /* spring集成mybatis组件，方便创建My
         ErrorContext.instance().reset();
       }
     }
-
+    /* Spring事务工厂 SpringManagedTransactionFactory */
     targetConfiguration.setEnvironment(new Environment(this.environment,
         this.transactionFactory == null ? new SpringManagedTransactionFactory() : this.transactionFactory,
         this.dataSource));
