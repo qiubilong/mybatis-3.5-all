@@ -9,8 +9,11 @@ import java.util.Date;
  */
 public class User implements Serializable{
 
-    private Long id ;
-    private String userName ;
+    private Long id;
+    private String name;
+    private Integer age;
+    private String email;
+    private Date updateTime;
     private Date createTime;
 
 
@@ -22,12 +25,36 @@ public class User implements Serializable{
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Date getCreateTime() {
@@ -38,13 +65,12 @@ public class User implements Serializable{
         this.createTime = createTime;
     }
 
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", createTime=" + createTime +
+                ", name='" + name + '\'' +
+                ", age=" + age +
                 '}';
     }
 }

@@ -30,7 +30,7 @@ public class TestJDBC {
             // SQL语句  参数#{}  ${}  <if>
             String sql="select id,user_name,create_time from  t_user where user_name= ? ;";
 
-            /*开启预处理时，首先向数据库执行预处理，如 Prepare	select id,user_name,create_time from  t_user where user_name= ?*/
+            /*开启预处理时，首先向数据库执行预处理，如 Prepare	select id,name,create_time from  t_user where name= ? */
             //可以在C:\ProgramData\MySQL\MySQL Server 5.7\Data\DESKTOP-SKE8KR8.log 数据库通用日志中验证
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,"xxx");/*这里对字符转义处理，防止sql注入*/
@@ -47,18 +47,18 @@ public class TestJDBC {
             if (rs.next()) {//处理一行数据
                 User user = new User();
                 user.setId(rs.getLong("id"));
-                user.setUserName(rs.getString("user_name"));
+                user.setName(rs.getString("name"));
                 user.setCreateTime(rs.getDate("create_time"));
                 System.out.println(user.toString());
             }
 
 
-            // useServerPrepStmts=true&cachePrepStmts=true --> 开启预处理--> 缓存
+            /* useServerPrepStmts=true&cachePrepStmts=true --> 开启预处理--> 缓存 */
             if(pstmt!=null){
                 pstmt.close();
             }
 
-            //useServerPrepStmts=true&cachePrepStmts=true --> 开启预处理 --> 从缓存中获取
+            /* useServerPrepStmts=true&cachePrepStmts=true --> 开启预处理 --> 从缓存中获取*/
             PreparedStatement pstmt1 = conn.prepareStatement(sql);
             pstmt1.setString(1,"xxx2");
             //开启预处理，只是传输参数
@@ -110,7 +110,7 @@ public class TestJDBC {
     public void testII(){
         BaseDao baseDao = new BaseDao();
         // 3个查询条件  1   2   3
-        User user = baseDao.executeJavaBean("select id,user_name,create_time from t_user where id=?", User.class, 1);
+        User user = baseDao.executeJavaBean("select id,name,create_time from user where id=?", User.class, 1);
 
         System.out.println(user);
     }
@@ -131,13 +131,14 @@ public class TestJDBC {
             conn.setAutoCommit(false);
 
             // SQL语句  参数#{}  ${}  <if>
-            String sql="  select id,user_name,create_time from  t_user where id=?;";
+            String sql="  select id,name,create_time from  t_user where id=?;";
 
-            // 获得sql执行者  ：
-            // 1.预编译（需数据库支持,MySQl默认已关闭）
-            //    1.1&useServerPrepStmts=true  这样才能保证mysql驱动会先把SQL语句发送给服务器进行预编译，然后在执行executeQuery()时只是把参数发送给服务器。
-            //    1.2 &cachePrepStmts=true
-            // 2.防SQL注入（敏感字符转义）
+            /* 获得sql执行者  ：
+            * 1.预编译（需数据库支持,MySQl默认已关闭）
+            *    1.1 &useServerPrepStmts=true  这样才能保证mysql驱动会先把SQL语句发送给服务器进行预编译，然后在执行executeQuery()时只是把参数发送给服务器。
+            *    1.2 &cachePrepStmts=true
+            * 2.防SQL注入（敏感字符转义）
+            */
             try(PreparedStatement pstmt=conn.prepareStatement(sql)) {
                 pstmt.setInt(1, 1);
 
@@ -150,7 +151,7 @@ public class TestJDBC {
                     rs.next();
                     User user = new User();
                     user.setId(rs.getLong("id"));
-                    user.setUserName(rs.getString("user_name"));
+                    user.setName(rs.getString("name"));
                     user.setCreateTime(rs.getDate("create_time"));
                     System.out.println(user.toString());
                 }
@@ -168,7 +169,7 @@ public class TestJDBC {
                     rs.next();
                     User user = new User();
                     user.setId(rs.getLong("id"));
-                    user.setUserName(rs.getString("user_name"));
+                    user.setName(rs.getString("name"));
                     user.setCreateTime(rs.getDate("create_time"));
                     System.out.println(user.toString());
                 }
