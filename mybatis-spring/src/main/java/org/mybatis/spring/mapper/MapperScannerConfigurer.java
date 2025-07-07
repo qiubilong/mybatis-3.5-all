@@ -88,7 +88,7 @@ import org.springframework.util.StringUtils;
  * @see MapperFactoryBean
  * @see ClassPathMapperScanner
  */
-public class MapperScannerConfigurer
+public class MapperScannerConfigurer /* Bean工厂处理器 */
     implements BeanDefinitionRegistryPostProcessor, InitializingBean, ApplicationContextAware, BeanNameAware {
 
   private String basePackage;
@@ -348,7 +348,7 @@ public class MapperScannerConfigurer
    *
    * @since 1.0.2
    */
-  @Override
+  @Override  /* Bean工厂处理器 - 扫描Mapper接口 */
   public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
     if (this.processPropertyPlaceHolders) {
       processPropertyPlaceHolders();
@@ -372,7 +372,7 @@ public class MapperScannerConfigurer
       scanner.setDefaultScope(defaultScope);
     }
     scanner.registerFilters();
-    scanner.scan(
+    scanner.scan( /* 扫描 Mapper接口 */
         StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
   }
 

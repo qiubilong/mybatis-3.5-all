@@ -47,7 +47,7 @@ public class MapperProxyFactory<T> {
     return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, mapperProxy);
   }
   /* 生成mapper接口代理对象   */
-  public T newInstance(SqlSession sqlSession) {//sqlSession == DefaultSqlSession
+  public T newInstance(SqlSession sqlSession) {/* sqlSession == （SqlSessionTemplate）DefaultSqlSession */
     final MapperProxy<T> mapperProxy = new MapperProxy<>(sqlSession, mapperInterface, methodCache);
     return newInstance(mapperProxy);
   }

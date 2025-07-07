@@ -55,7 +55,7 @@ import org.springframework.beans.factory.FactoryBean;
 
 注入SqlSessionTemplate --> 保证线程安全  */
 public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements FactoryBean<T> {
-
+  // 父类 SqlSessionTemplate sqlSessionTemplate; <-- setXXX - 自动注入 DefaultSqlSessionFactory - 构建sqlSessionTemplate
   private Class<T> mapperInterface; /* 被代理Mapper接口 */
 
   private boolean addToConfig = true;
@@ -72,7 +72,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
    * {@inheritDoc}
    */
   @Override
-  protected void checkDaoConfig() {
+  protected void checkDaoConfig() { /* 父类 InitializingBean.afterSetProperties() */
     super.checkDaoConfig();
 
     notNull(this.mapperInterface, "Property 'mapperInterface' is required");
@@ -93,7 +93,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
   /**
    * {@inheritDoc}
    */
-  @Override
+  @Override /* Mapper代理对象 */
   public T getObject() throws Exception {
     return getSqlSession().getMapper(this.mapperInterface); /* SqlSessionTemplate.getConfiguration()创建Mapper接口代理 MapperProxy */
   }

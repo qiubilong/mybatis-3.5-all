@@ -25,7 +25,7 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
 /**
  * @author Clinton Begin
  */
-public class TextSqlNode implements SqlNode {
+public class TextSqlNode implements SqlNode { /* 动态文本 - ${}  */
   private final String text;
   private final Pattern injectionFilter;
 
@@ -53,7 +53,7 @@ public class TextSqlNode implements SqlNode {
   }
 
   private GenericTokenParser createParser(TokenHandler handler) {
-    return new GenericTokenParser("${", "}", handler);
+    return new GenericTokenParser("${", "}", handler); /* 美元占位符 */
   }
 
   private static class BindingTokenParser implements TokenHandler {
@@ -74,7 +74,7 @@ public class TextSqlNode implements SqlNode {
       } else if (SimpleTypeRegistry.isSimpleType(parameter.getClass())) {
         context.getBindings().put("value", parameter);
       }
-      Object value = OgnlCache.getValue(content, context.getBindings());
+      Object value = OgnlCache.getValue(content, context.getBindings());/* 直接字符替换 - 美元占位符${} */
       String srtValue = value == null ? "" : String.valueOf(value); // issue #274 return "" instead of "null"
       checkInjection(srtValue);
       return srtValue;

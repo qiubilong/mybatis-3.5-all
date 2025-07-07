@@ -87,7 +87,7 @@ public class PropertyParser {
           }
         }
         if (variables.containsKey(key)) {
-          return variables.getProperty(key);
+          return variables.getProperty(key); /* 美元占位符 ${} 直接替换成变量内容 */
         }
       }
       return "${" + content + "}";

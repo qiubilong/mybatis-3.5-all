@@ -71,7 +71,7 @@ public class App {
             for (User user : users) {
                 mapper.insert(user);
             }
-            sqlSession.flushStatements();
+            sqlSession.commit();
         }
         log.info("testBatchInsertInSession cost={}",( System.currentTimeMillis() - start));
         sqlSession.close();
