@@ -104,7 +104,7 @@ public final class SqlSessionUtils {
     LOGGER.debug(() -> "Creating a new SqlSession");
     /* 当前线程绑定不存在 DefaultSqlSession， 新创建一个 DefaultSqlSession */
     session = sessionFactory.openSession(executorType);
-    /* 如果当前线程存在事务，则绑定SqlSession当前线程 */
+    /* 如果当前线程存在事务，则绑定SqlSession当前线程 */                          /* 如果不开启事务，不存ThreadLocal，相当于每次操作都是创建新的DefaultSqlSession */
     registerSessionHolder(sessionFactory, executorType, exceptionTranslator, session);
 
     return session;

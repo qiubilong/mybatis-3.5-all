@@ -47,7 +47,7 @@ public class SpringManagedTransaction implements Transaction { /* Spring事务 *
 
   private final DataSource dataSource;
 
-  private Connection connection;
+  private Connection connection; /* 一个 DefaultSqlSession 一个连接 */
 
   private boolean isConnectionTransactional;
 
@@ -77,7 +77,7 @@ public class SpringManagedTransaction implements Transaction { /* Spring事务 *
    * false and will always call commit/rollback so we need to no-op that calls.
    */
   private void openConnection() throws SQLException {
-    this.connection = DataSourceUtils.getConnection(this.dataSource); /* 保证同个事务使用同个Connection */
+    this.connection = DataSourceUtils.getConnection(this.dataSource); /* 如果外部业务方法开启了事务@Transactional,那么ThreadLocal中已经存在数据库连接。保证同个事务使用同个Connection */
     this.autoCommit = this.connection.getAutoCommit();
     this.isConnectionTransactional = DataSourceUtils.isConnectionTransactional(this.connection, this.dataSource);
 
@@ -92,7 +92,7 @@ public class SpringManagedTransaction implements Transaction { /* Spring事务 *
   public void commit() throws SQLException {
     if (this.connection != null && !this.isConnectionTransactional && !this.autoCommit) {
       LOGGER.debug(() -> "Committing JDBC Connection [" + this.connection + "]");
-      this.connection.commit();
+      this.connection.commit(); /* 如果设置了autoCommit=false，这里就提交事务 */
     }
   }
 

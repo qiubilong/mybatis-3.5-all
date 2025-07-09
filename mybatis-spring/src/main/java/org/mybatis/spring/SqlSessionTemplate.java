@@ -222,7 +222,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
    */
   @Override
   public <E> List<E> selectList(String statement, Object parameter) {
-    return this.sqlSessionProxy.selectList(statement, parameter);
+    return this.sqlSessionProxy.selectList(statement, parameter); /* SqlSessionInterceptor */
   }
 
   /**
@@ -419,20 +419,20 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
    * unwraps exceptions thrown by {@code Method#invoke(Object, Object...)} to pass a {@code PersistenceException} to the
    * {@code PersistenceExceptionTranslator}.
    */
-  /* SqlSession所有方法拦截 - 总入口 */
+  /* SqlSession所有方法 - 拦截总入口 */
   private class SqlSessionInterceptor implements InvocationHandler {
-    @Override
+    @Override  /**-----总结：如果没有开启事务@Transactional，一个方法里每次操作Dao都新建一个DefaultSqlSession，操作完成后提交事务           */
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-      /* 返回当前线程绑定的ThreadLocal的 DefaultSqlSession， 否则新建一个  */
-      SqlSession sqlSession = getSqlSession(SqlSessionTemplate.this.sqlSessionFactory,
+      /* 开启事务@Transactional，返回ThreadLocal的 DefaultSqlSession， 否则新建一个  */
+      SqlSession sqlSession = getSqlSession(SqlSessionTemplate.this.sqlSessionFactory, /* 如果不开启事务@Transactional，相当于每次都是创建新的DefaultSqlSession */
           SqlSessionTemplate.this.executorType, SqlSessionTemplate.this.exceptionTranslator);
       try {
-        /* 反射调用DefaultSqlSession的方法 */
+        /* 反射调用 DefaultSqlSession 的方法 */
         Object result = method.invoke(sqlSession, args);
         if (!isSqlSessionTransactional(sqlSession, SqlSessionTemplate.this.sqlSessionFactory)) {
           // force commit even on non-dirty sessions because some databases require
           // a commit/rollback before calling close()
-          sqlSession.commit(true);
+          sqlSession.commit(true); /* 如果不开启事务@Transactional，每次数据操作都commit事务 */
         }
         return result;
       } catch (Throwable t) {

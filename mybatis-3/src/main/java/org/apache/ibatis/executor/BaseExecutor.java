@@ -242,7 +242,7 @@ public abstract class BaseExecutor implements Executor {
     clearLocalCache();
     flushStatements();
     if (required) {
-      transaction.commit();
+      transaction.commit();/* 提交事务 */
     }
   }
 

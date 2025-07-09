@@ -41,7 +41,7 @@ public class MapperRegistry { /* Mapper注册器 */
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getMapper(Class<T> type, SqlSession sqlSession) { /* 获取Mappper代理 */
+  public <T> T getMapper(Class<T> type, SqlSession sqlSession) { /* 获取Mapper代理 */
     final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
     if (mapperProxyFactory == null) {
       throw new BindingException("Type " + type + " is not known to the MapperRegistry.");

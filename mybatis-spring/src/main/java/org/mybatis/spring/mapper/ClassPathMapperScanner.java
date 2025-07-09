@@ -233,7 +233,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
       // the mapper interface is the original class of the bean
       // but, the actual class of the bean is MapperFactoryBean
-      definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); /* 指定构造函数 - MapperFactoryBean(Class<T> mapperInterface) */
+      definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); /* 指定构造函数参数 - MapperFactoryBean(Class<T> mapperInterface) */
       try {
         // for spring-native
         definition.getPropertyValues().add("mapperInterface", Resources.classForName(beanClassName));
@@ -241,7 +241,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         // ignore
       }
 
-      definition.setBeanClass(this.mapperFactoryBeanClass); /* MapperFactoryBean - Mapper Bean工厂 */
+      definition.setBeanClass(this.mapperFactoryBeanClass); /* MapperFactoryBean - 生成Mapper代理的 Bean工厂 */
 
       definition.getPropertyValues().add("addToConfig", this.addToConfig);
 
@@ -278,7 +278,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
       if (!explicitFactoryUsed) {
         LOGGER.debug(() -> "Enabling autowire by type for MapperFactoryBean with name '" + holder.getBeanName() + "'.");
-        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE); /* 	setXXX --> 参数类型 --> 注入依赖 */
+        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE); /* 	注入依赖的方式  --> setXXX --> 参数类型 */
       }
 
       definition.setLazyInit(lazyInitialization);

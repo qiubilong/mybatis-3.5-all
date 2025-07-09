@@ -98,7 +98,7 @@ public class SimpleExecutor extends BaseExecutor {
     Statement stmt;
     /* 获取连接 Connection（开启日志时，返回ConnectionLogger） */
     Connection connection = getConnection(statementLog);
-    /* 执行底层jdbc预处理，返回PreparedStatement（开启日志时，返回PreparedStatementLogger） */
+    /* 执行底层jdbc预处理，返回PreparedStatement（开启日志时，返回 PreparedStatementLogger） */
     stmt = handler.prepare(connection, transaction.getTimeout());
     /* PreparedStatementHandler 参数设置 */
     handler.parameterize(stmt);

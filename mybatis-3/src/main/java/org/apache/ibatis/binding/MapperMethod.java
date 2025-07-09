@@ -47,7 +47,7 @@ import org.apache.ibatis.session.SqlSession;
 public class MapperMethod {
 
   private final SqlCommand command;        /* sql命令类型 */
-  private final MethodSignature method;    /* 方法信息，主要包括返回值类型，@Param参数列表 */
+  private final MethodSignature method;    /* 方法信息，主要包括返回值类型 + @Param参数列表 */
 
   public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
     this.command = new SqlCommand(config, mapperInterface, method);
@@ -145,7 +145,7 @@ public class MapperMethod {
       RowBounds rowBounds = method.extractRowBounds(args);
       result = sqlSession.selectList(command.getName(), param, rowBounds);
     } else {
-      result = sqlSession.selectList(command.getName(), param);/* DefaultSqlSession.selectList */
+      result = sqlSession.selectList(command.getName(), param);/* (SqlSessionTemplate)DefaultSqlSession.selectList */
     }
     // issue #510 Collections & arrays support
     if (!method.getReturnType().isAssignableFrom(result.getClass())) {

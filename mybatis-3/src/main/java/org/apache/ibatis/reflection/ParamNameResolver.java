@@ -51,7 +51,7 @@ public class ParamNameResolver {
 
   public ParamNameResolver(Configuration config, Method method) {  /* 解析方法参数名 */
     final Class<?>[] paramTypes = method.getParameterTypes();
-    final Annotation[][] paramAnnotations = method.getParameterAnnotations();/* 获取参数列表和其对应的注解 */
+    final Annotation[][] paramAnnotations = method.getParameterAnnotations();/* 获取参数列表 和 其对应的注解 */
     final SortedMap<Integer, String> map = new TreeMap<>();
     int paramCount = paramAnnotations.length;
     // get names from @Param annotations
@@ -112,7 +112,7 @@ public class ParamNameResolver {
     if (args == null || paramCount == 0) {
       return null;
     } else if (!hasParamAnnotation && paramCount == 1) {
-      return args[names.firstKey()];/* 单个无注解@Param参数 */
+      return args[names.firstKey()];/* 单个 - 无注解@Param 参数 */
     } else {
       final Map<String, Object> param = new ParamMap<>();
       int i = 0;

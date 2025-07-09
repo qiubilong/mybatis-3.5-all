@@ -67,7 +67,7 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
   /**
    * {@inheritDoc}
    */
-  @Override  /* ConfigurationClassPostProcessor - ImportBeanDefinitionRegistrar回调， importingClassMetadata=声明注解的配置类  */
+  @Override  /* ConfigurationClassPostProcessor - ImportBeanDefinitionRegistrar回调， importingClassMetadata=声明注解的配置类上的注解信息  */
   public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
     AnnotationAttributes mapperScanAttrs = AnnotationAttributes
         .fromMap(importingClassMetadata.getAnnotationAttributes(MapperScan.class.getName()));/* 读取@MapperScan注解配置 */

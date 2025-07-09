@@ -221,7 +221,7 @@ public class DefaultSqlSession implements SqlSession {
   @Override
   public void commit(boolean force) {
     try {
-      executor.commit(isCommitOrRollbackRequired(force));
+      executor.commit(isCommitOrRollbackRequired(force));/* 提交事务 */
       dirty = false;
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error committing transaction.  Cause: " + e, e);
