@@ -43,7 +43,7 @@ public final class MappedStatement { /* sql映射语句 */
   private Cache cache;
   private ParameterMap parameterMap;      /* 参数类型 - parameterType */
   private List<ResultMap> resultMaps;     /* 结果映射，优先resultMap > resultType */
-  private boolean flushCacheRequired;
+  private boolean flushCacheRequired; //非select操作就清空缓存
   private boolean useCache;
   private boolean resultOrdered;
   private SqlCommandType sqlCommandType;   /* sql命令类型 */

@@ -55,7 +55,7 @@ public abstract class BaseExecutor implements Executor {
   protected Executor wrapper;        /* 子类 SimpleExecutor，开启缓存时覆盖为CachingExecutor */
 
   protected ConcurrentLinkedQueue<DeferredLoad> deferredLoads;
-  protected PerpetualCache localCache;   /* session缓存 */
+  protected PerpetualCache localCache;   /* session 一级缓存 - 集成spring后，未定义事务@Transactional时，每次Dao操作都是新建DefaultSqlSession，因为缓存相当于无效 */
   protected PerpetualCache localOutputParameterCache;
   protected Configuration configuration;  /* 全局配置 */
 
@@ -149,7 +149,7 @@ public abstract class BaseExecutor implements Executor {
     List<E> list;
     try {
       queryStack++;
-      list = resultHandler == null ? (List<E>) localCache.getObject(key) : null; /* session缓存 */
+      list = resultHandler == null ? (List<E>) localCache.getObject(key) : null; /* session一级缓存 */
       if (list != null) {
         handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
       } else {
@@ -327,7 +327,7 @@ public abstract class BaseExecutor implements Executor {
     } finally {
       localCache.removeObject(key);
     }
-    localCache.putObject(key, list);/* session级别缓存 */
+    localCache.putObject(key, list);/* session一级缓存 */
     if (ms.getStatementType() == StatementType.CALLABLE) {
       localOutputParameterCache.putObject(key, parameter);
     }
